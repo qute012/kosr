@@ -1,6 +1,6 @@
 model:
   encoder:
-    model_dim: 512
+    model_dim: 1024
     ffn_dim: 2048
     layers: 6
     heads: 8

@@ -1,6 +1,6 @@
 import Levenshtein as Lev
 
-def WER(s1, s2):
+def wer(s1, s2):
     """
     Computes the Word Error Rate, defined as the edit distance between the
     two provided sentences after tokenizing to words.
@@ -17,7 +17,7 @@ def WER(s1, s2):
     return Lev.distance(''.join(w1), ''.join(w2))
 
 
-def CER(s1, s2):
+def cer(s1, s2):
     """
     Computes the Character Error Rate, defined as the edit distance.
     Arguments:
