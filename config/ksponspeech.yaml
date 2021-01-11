@@ -1,15 +1,15 @@
 model:
   encoder:
-    model_dim: 1024
+    model_dim: 256
     ffn_dim: 2048
-    layers: 6
-    heads: 8
+    layers: 16
+    heads: 4
     vocab_size: ???
 
   decoder:
-    model_dim: 512
+    model_dim: 640
     ffn_dim: 2048
-    layers: 6
+    layers: 1
     heads: 8
     vocab_size: ???
 

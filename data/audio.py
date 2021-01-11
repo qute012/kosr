@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import torchaudio
 
-def load_audio(path, sr=16000):
+def load_audio(path, sr=16000, out_tensor=True):
     ext = path.split('.')[-1]
     
     if ext=='pcm':
@@ -14,6 +14,8 @@ def load_audio(path, sr=16000):
             sig = np.frombuffer(buf, dtype='int16')
     else:
         sig, sr = sf.read(path, sr)
-            
-    sig = torch.FloatTensor(sig).unsqueeze(0)
-    return sig, sr
+    
+    if out_tensor:
+        return torch.FloatTensor(sig).unsqueeze(0), sr
+    else:
+        return sig, sr
