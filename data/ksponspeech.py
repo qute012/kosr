@@ -8,9 +8,6 @@ from features import *
 from audio import *
 
 import pickle
-from multiprocessing import Pool
-from functools import partial
-import time
 
 def prep_manifest(trn, root_dir):
     with open('Ksponspeech/kspon_labels.json', 'r') as f:
@@ -27,11 +24,30 @@ def prep_manifest(trn, root_dir):
         MelSpectrogram(**conf['feature']['spec'])
     ])
     
+    feat_path = os.path.join('Ksponspeech/features',trn.split('/')[-1].split('.')[0])
+    os.makedirs(feat_path, exist_ok=True)
+    
+    record_size = 10000
+    cur_rec = 0
+    cnt_spec = 0
+    records = list()
     for line in tqdm(lines):
         fname, script = line.split(' :: ')
         fname = os.path.join(root_dir, fname)
         sig, sr = load_audio(fname)
         spec = transforms(sig)
+        
+        records.append((spec,script))
+        cnt_spec += 1
+        if cnt_spec==record_size:
+            with open(os.path.join(feat_path,f"{cur_rec}.record"),'wb') as f:
+                pickle.dump(records, f)
+            cnt_spec = 0
+            cur_rec += 1
+            records = list()
+    if len(records)>0:
+        with open(os.path.join(feat_path,f"{cur_rec}.record"),'wb') as f:
+            pickle.dump(records, f)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Preparing Ksponspeech for training and evaluating')
