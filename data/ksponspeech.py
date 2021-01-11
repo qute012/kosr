@@ -3,7 +3,9 @@ import yaml
 import argparse
 import os
 from tqdm import tqdm
-from features
+
+from features import *
+from audio import *
 
 def prep_manifest(trn, root_dir):
     with open('Ksponspeech/kspon_labels.json', 'r') as f:
