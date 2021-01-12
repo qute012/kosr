@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class VGGExtracter(nn.module):
-    def __init__(self):
+    def __init__(self, feature_size=128, hidden_size=512, proj_dropout_rate=0.1):
         self.conv = nn.Sequential(
             nn.Conv2d(1, 64, 3, stride=1, padding=1),
             nn.ReLU(),
@@ -15,39 +15,45 @@ class VGGExtracter(nn.module):
             nn.ReLU(),
             nn.MaxPool2d(2, stride=2)
         )
-        
-    def forward(self, x):
-        x = self.conv(x)
-        return x
-        
-class W2VExtracter(nn.module):
-    def __init__(self, hidden_size=512, dropout_rate=0.0):
-        self.conv = nn.Sequential(
-            nn.Conv2d(1, hidden_size, 10, stride=5, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 3, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 3, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 3, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 3, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 2, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-            nn.Conv2d(hidden_size, hidden_size, 2, stride=2, bias=False),
-            nn.Dropout(p=dropout_rate),
-            nn.GELU(),
-        )
-        self.post_extract_proj = nn.Linear(hidden_size, hidden_size)
+        self.post_extract_proj = nn.Linear(feature_size, hidden_size)
+        self.dropout = nn.Dropout(p=proj_dropout_rate)
         
     def forward(self, x):
         x = self.conv(x)
         x = self.post_extract_proj(x)
+        x = self.dropout(x)
+        return x
+        
+class W2VExtracter(nn.module):
+    def __init__(self, feature_size=512, hidden_size=512, conv_dropout_rate=0.0, proj_dropout_rate=0.1):
+        self.conv = nn.Sequential(
+            nn.Conv2d(1, feature_size, 10, stride=5, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 3, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 3, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 3, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 3, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 2, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+            nn.Conv2d(feature_size, feature_size, 2, stride=2, bias=False),
+            nn.Dropout(p=conv_dropout_rate),
+            nn.GELU(),
+        )
+        self.post_extract_proj = nn.Linear(feature_size, hidden_size)
+        self.dropout = nn.Dropout(p=proj_dropout_rate)
+        
+    def forward(self, x):
+        x = self.conv(x)
+        x = self.post_extract_proj(x)
+        x = self.dropout(x)
         return x
