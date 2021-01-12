@@ -1,7 +1,7 @@
 # Korean-Online-Speech-Recognition
 Automatic speech recognition trained 1,000 hours KsponSpeech dataset.
 
-# Installation
+# Setup
 warp-transducer needs to install gcc5 and export CUDA environment variable.
 
 CUDA_HOME settings

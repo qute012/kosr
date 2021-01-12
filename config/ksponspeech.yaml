@@ -13,11 +13,20 @@ model:
     heads: 8
     vocab_size: ???
 
-train:
+optimizer:
   optim: adam
   loss: rrn-t
-  device: cuda
   lr: 0.0001
+  peak_lr: 5e-2
+  min_lr: 1e-6
+  ramp_up: 16000
+  exp_decay: 800000
+  weight_decay: 2e-6
+  betas: (0.9,0.98)
+  scheduler: exp
+
+train:
+  device: cuda
   batch_size: 16
   epochs: 50
   save_epoch: 1

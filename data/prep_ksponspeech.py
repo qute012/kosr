@@ -52,7 +52,6 @@ def prep_manifest(trn, root_dir):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Preparing Ksponspeech for training and evaluating')
     parser.add_argument('--path', default='/root/storage/dataset/kspon', type=str, help="dataset root directory")
-    parser.add_argument('--workers', default=4, type=int, help="number of workers")
     args = parser.parse_args()
     
     name = "Ksponspeech"
