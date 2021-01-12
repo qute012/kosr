@@ -22,7 +22,6 @@ optimizer:
   ramp_up: 16000
   exp_decay: 800000
   weight_decay: 2e-6
-  betas: (0.9,0.98)
   scheduler: exp
 
 train:
