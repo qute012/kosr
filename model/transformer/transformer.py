@@ -32,7 +32,10 @@ class Transformer(nn.Module):
         gold_seq = gold
 
         return pred, gold, hyp_seq, gold_seq
-
+    
+    def evaluate(self):
+        raise NotImplementedError
+    
     def initialize(self):
         # weight init
         for p in self.parameters():
