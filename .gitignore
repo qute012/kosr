@@ -5,5 +5,3 @@ checkpoint
 checkpoint/*
 data/Ksponspeech/*/*/*.record
 .ipynb
-.gitignore.swp
-.gitmodules
