@@ -15,17 +15,23 @@ class Transformer(nn.Module):
         
         self.initialize()
 
-    def forward(self, inputs, targets):
-        enc_output, i_mask = None, None
-        if self.has_inputs:
-            i_mask = utils.create_pad_mask(inputs, self.src_pad_idx)
-            enc_output = self.encode(inputs, i_mask)
+    def forward(self, padded_input, input_lengths, padded_target):
+        if self.feat_extractor == 'emb_cnn' or self.feat_extractor == 'vgg_cnn':
+            padded_input = self.conv(padded_input)
 
-        t_mask = utils.create_pad_mask(targets, self.trg_pad_idx)
-        target_size = targets.size()[1]
-        t_self_mask = utils.create_trg_self_mask(target_size,
-                                                 device=targets.device)
-        return self.decode(targets, enc_output, i_mask, t_self_mask, t_mask)
+        # Reshaping features
+        sizes = padded_input.size() # B x H_1 (channel?) x H_2 x T
+        padded_input = padded_input.view(sizes[0], sizes[1] * sizes[2], sizes[3])
+        padded_input = padded_input.transpose(1, 2).contiguous()  # BxTxH
+
+        encoder_padded_outputs, _ = self.encoder(padded_input, input_lengths)
+        pred, gold, *_ = self.decoder(padded_target, encoder_padded_outputs, input_lengths)
+        hyp_best_scores, hyp_best_ids = torch.topk(pred, 1, dim=2)
+
+        hyp_seq = hyp_best_ids.squeeze(2)
+        gold_seq = gold
+
+        return pred, gold, hyp_seq, gold_seq
 
     def initialize(self):
         # weight init
