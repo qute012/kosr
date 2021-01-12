@@ -20,7 +20,7 @@ class FeedForwardNetwork(torch.nn.Module):
         super(PositionwiseFeedForward, self).__init__()
         self.layer1 = nn.Linear(hidden_size, filter_size)
         self.dropout = nn.Dropout(dropout_rate)
-        self.act = nn.GeLU()
+        self.act = nn.SILU()
         self.layer2 = nn.Linear(filter_size, hidden_size)
 
     def forward(self, x):
