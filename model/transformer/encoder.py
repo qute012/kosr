@@ -25,20 +25,19 @@ class EncoderLayer(nn.Module):
         y = self.ffn(y)
         y = self.ffn_dropout(y)
         x = x + y
-        return x
+        return x, mask
     
 class Encoder(nn.Module):
     def __init__(self, hidden_size, filter_size, dropout_rate, n_layers):
         super(Encoder, self).__init__()
 
-        encoders = [EncoderLayer(hidden_size, filter_size, dropout_rate)
-                    for _ in range(n_layers)]
-        self.layers = nn.ModuleList(encoders)
+        self.layers = nn.ModuleList([EncoderLayer(hidden_size, filter_size, dropout_rate)
+                    for _ in range(n_layers)])
 
         self.last_norm = nn.LayerNorm(hidden_size, eps=1e-6)
 
     def forward(self, inputs, mask):
         encoder_output = inputs
         for enc_layer in self.layers:
-            encoder_output = enc_layer(encoder_output, mask)
-        return self.last_norm(encoder_output)
+            encoder_output, mask = enc_layer(encoder_output, mask)
+        return self.last_norm(encoder_output), mask

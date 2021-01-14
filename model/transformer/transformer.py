@@ -6,8 +6,12 @@ from decoder import *
 from ..feature_extractor import *
 
 class Transformer(nn.Module):
-    def __init__(self, vocab_size, feat_extractor='vgg', enc_n_layers=16, dec_n_layer=1, hidden_size=512, filter_size=2048, dropout_rate=0.1):
+    def __init__(self, vocab_size, feat_extractor='vgg', enc_n_layers=16, dec_n_layer=1, hidden_size=512, filter_size=2048, dropout_rate=0.1, pad_id=0, sos_id=1, eos_id=2):
         super(Transformer, self).__init__()
+        self.pad_id = pad_id
+        self.sos_id = sos_id
+        self.eos_id = eos_id
+        
         if feat_extractor=='vgg':
             self.conv = VGGExtracter()
         elif feat_extractor=='w2v':
@@ -38,35 +42,7 @@ class Transformer(nn.Module):
         gold_seq = gold
 
         return pred, gold, hyp_seq, gold_seq
-    
-    def recognize(self):
-        btz = listener_features.size(0)
-        y_hats = torch.zeros(btz, max_step).long().cuda()
-        logit, hc, context = self.forward_step(inputs, hc, listener_features)
-        output_words = logit.topk(beam_size)[1].squeeze(1)
-        for bi in range(btz):
-            b_output_words = output_words[bi,:].unsqueeze(0).transpose(1,0).contiguous()
-            b_inputs = self.emb(b_output_words)
-            b_listener_features = listener_features[bi,:,:].unsqueeze(0).expand((beam_size,-1,-1)).contiguous()
-            if isinstance(hc, tuple):
-                b_h = hc[0][:,bi,:].unsqueeze(1).expand((-1,beam_size,-1)).contiguous()
-                b_c = hc[1][:,bi,:].unsqueeze(1).expand((-1,beam_size,-1)).contiguous()
-                b_hc = (b_h, b_c)
-            else:
-                b_hc = hc[:,bi,:].unsqueeze(1).expand((-1,beam_size,-1)).contiguous()
 
-            scores = torch.zeros(beam_size,1).cuda()
-            ids = torch.zeros(beam_size, max_step, 1).long().cuda()
-            for step in range(max_step):
-                logit, b_hc, context = self.forward_step(b_inputs, b_hc, b_listener_features)
-                score, id = logit.topk(1)
-                scores += score.squeeze(1)
-                ids[:,step,:] = id.squeeze(1)
-                output_word = logit.topk(1)[1].squeeze(-1)
-                b_inputs = self.emb(output_word)
-            y_hats[bi,:] = ids[scores.squeeze(1).topk(1)[1],:].squeeze(2)
-        return y_hats
-    
     def initialize(self):
         # weight init
         for p in self.parameters():

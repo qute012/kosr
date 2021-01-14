@@ -55,7 +55,7 @@ def get_subsequent_mask(seq):
 
     return subsequent_mask
 
-class MultiHeadedAttention(nn.Module):
+class MultiHeadAttention(nn.Module):
     """Multi-Head Attention layer.
     Args:
         n_head (int): The number of heads.
@@ -145,7 +145,7 @@ class MultiHeadedAttention(nn.Module):
         return self.forward_attention(v, scores, mask)
 
 
-class RelPositionMultiHeadedAttention(MultiHeadedAttention):
+class RelPositionMultiHeadAttention(MultiHeadAttention):
     """Multi-Head Attention layer with relative position encoding.
     Paper: https://arxiv.org/abs/1901.02860
     Args:

@@ -42,9 +42,8 @@ class Decoder(nn.Module):
     def __init__(self, hidden_size, filter_size, dropout_rate, n_layers):
         super(Decoder, self).__init__()
 
-        decoders = [DecoderLayer(hidden_size, filter_size, dropout_rate)
-                    for _ in range(n_layers)]
-        self.layers = nn.ModuleList(decoders)
+        self.layers = nn.ModuleList([DecoderLayer(hidden_size, filter_size, dropout_rate)
+                    for _ in range(n_layers)])
 
         self.last_norm = nn.LayerNorm(hidden_size, eps=1e-6)
 
