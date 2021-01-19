@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-class VGGExtracter(nn.module):
+class VGGExtractor(nn.Module):
     def __init__(self, feature_size=128, hidden_size=512, proj_dropout_rate=0.1):
         super(VGGExtracter).__init__()
         self.conv = nn.Sequential(
@@ -25,7 +25,7 @@ class VGGExtracter(nn.module):
         x = self.dropout(x)
         return x
         
-class W2VExtracter(nn.module):
+class W2VExtractor(nn.Module):
     def __init__(self, feature_size=512, hidden_size=512, conv_dropout_rate=0.0, proj_dropout_rate=0.1):
         super(W2VExtracter).__init__()
         self.conv = nn.Sequential(
