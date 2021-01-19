@@ -1,0 +1,7 @@
+README.md
+setup.py
+kosr.egg-info/PKG-INFO
+kosr.egg-info/SOURCES.txt
+kosr.egg-info/dependency_links.txt
+kosr.egg-info/requires.txt
+kosr.egg-info/top_level.txt

@@ -1,14 +1,14 @@
 import torch
 import torch.nn as nn
-from ..attention import MultiHeadAttention
-from sub_layer import FeedForwardNetwork
+from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
+from kosr.model.transformer.sub_layer import *
 
 class EncoderLayer(nn.Module):
-    def __init__(self, hidden_size, filter_size, dropout_rate):
+    def __init__(self, hidden_size, filter_size, n_head, dropout_rate):
         super(EncoderLayer, self).__init__()
 
         self.self_attention_norm = nn.LayerNorm(hidden_size, eps=1e-6)
-        self.self_attention = MultiHeadAttention(hidden_size, dropout_rate)
+        self.self_attention = RelPositionMultiHeadAttention(n_head, hidden_size, dropout_rate)
         self.self_attention_dropout = nn.Dropout(dropout_rate)
 
         self.ffn_norm = nn.LayerNorm(hidden_size, eps=1e-6)
@@ -28,10 +28,10 @@ class EncoderLayer(nn.Module):
         return x, mask
     
 class Encoder(nn.Module):
-    def __init__(self, hidden_size, filter_size, dropout_rate, n_layers):
+    def __init__(self, hidden_size, filter_size, n_head, dropout_rate, n_layers):
         super(Encoder, self).__init__()
 
-        self.layers = nn.ModuleList([EncoderLayer(hidden_size, filter_size, dropout_rate)
+        self.layers = nn.ModuleList([EncoderLayer(hidden_size, filter_size, n_head, dropout_rate)
                     for _ in range(n_layers)])
 
         self.last_norm = nn.LayerNorm(hidden_size, eps=1e-6)

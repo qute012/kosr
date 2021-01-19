@@ -1,18 +1,18 @@
 import torch
 import torch.nn as nn
-from ..attention import MultiHeadAttention
-from sub_layer import FeedForwardNetwork
+from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
+from kosr.model.transformer.sub_layer import *
 
 class DecoderLayer(nn.Module):
-    def __init__(self, hidden_size, filter_size, dropout_rate):
+    def __init__(self, hidden_size, filter_size, n_head, dropout_rate):
         super(DecoderLayer, self).__init__()
 
         self.self_attention_norm = nn.LayerNorm(hidden_size, eps=1e-6)
-        self.self_attention = MultiHeadAttention(hidden_size, dropout_rate)
+        self.self_attention = MultiHeadAttention(n_head, hidden_size, dropout_rate)
         self.self_attention_dropout = nn.Dropout(dropout_rate)
 
         self.enc_dec_attention_norm = nn.LayerNorm(hidden_size, eps=1e-6)
-        self.enc_dec_attention = MultiHeadAttention(hidden_size, dropout_rate)
+        self.enc_dec_attention = MultiHeadAttention(n_head, hidden_size, dropout_rate)
         self.enc_dec_attention_dropout = nn.Dropout(dropout_rate)
 
         self.ffn_norm = nn.LayerNorm(hidden_size, eps=1e-6)
@@ -39,15 +39,15 @@ class DecoderLayer(nn.Module):
         return x
 
 class Decoder(nn.Module):
-    def __init__(self, hidden_size, filter_size, dropout_rate, n_layers):
+    def __init__(self, hidden_size, filter_size, n_head, dropout_rate, n_layers):
         super(Decoder, self).__init__()
 
-        self.layers = nn.ModuleList([DecoderLayer(hidden_size, filter_size, dropout_rate)
+        self.layers = nn.ModuleList([DecoderLayer(hidden_size, filter_size, n_head, dropout_rate)
                     for _ in range(n_layers)])
 
         self.last_norm = nn.LayerNorm(hidden_size, eps=1e-6)
 
-    def forward(self, targets, enc_output, i_mask, t_self_mask, cache):
+    def forward(self, targets, enc_output, tgt_mask, enc_mask, cache):
         decoder_output = targets
         for i, dec_layer in enumerate(self.layers):
             layer_cache = None
@@ -55,6 +55,5 @@ class Decoder(nn.Module):
                 if i not in cache:
                     cache[i] = {}
                 layer_cache = cache[i]
-            decoder_output = dec_layer(decoder_output, enc_output,
-                                       t_self_mask, i_mask, layer_cache)
+            decoder_output = dec_layer(decoder_output, enc_output, tgt_mask, enc_mask, layer_cache)
         return self.last_norm(decoder_output)

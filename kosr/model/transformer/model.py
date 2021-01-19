@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
 
-
-from kosr.feature_extractor import *
+from kosr.model.feature_extractor import *
+from kosr.model.transformer.encoder import Encoder
+from kosr.model.transformer.decoder import Decoder
 
 class Transformer(nn.Module):
     def __init__(

@@ -1,4 +1,5 @@
 import torch
+from kosr.model.attention import *
 
 class PositionalEncoding(nn.Module):
     def __init__(self, dim_model, max_length=2000):
@@ -20,7 +21,7 @@ class FeedForwardNetwork(torch.nn.Module):
         super(FeedForwardNetwork, self).__init__()
         self.layer1 = nn.Linear(hidden_size, filter_size)
         self.dropout = nn.Dropout(dropout_rate)
-        self.act = nn.SILU()
+        self.act = nn.SELU()
         self.layer2 = nn.Linear(filter_size, hidden_size)
 
     def forward(self, x):
