@@ -65,7 +65,7 @@ class MultiHeadAttention(nn.Module):
 
     def __init__(self, n_head, n_feat, dropout_rate):
         """Construct an MultiHeadedAttention object."""
-        super(MultiHeadedAttention, self).__init__()
+        super(MultiHeadAttention, self).__init__()
         assert n_feat % n_head == 0
         # We assume d_v always equals d_k
         self.d_k = n_feat // n_head

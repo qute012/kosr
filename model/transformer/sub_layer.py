@@ -17,7 +17,7 @@ class PositionalEncoding(nn.Module):
 
 class FeedForwardNetwork(torch.nn.Module):
     def __init__(self, hidden_size, filter_size, dropout_rate):
-        super(PositionwiseFeedForward, self).__init__()
+        super(FeedForwardNetwork, self).__init__()
         self.layer1 = nn.Linear(hidden_size, filter_size)
         self.dropout = nn.Dropout(dropout_rate)
         self.act = nn.SILU()
