@@ -1,7 +1,7 @@
 profile_default/
 ipython_config.py
 
-checkpoint
-checkpoint/*
-data/Ksponspeech/*/*/*.record
-.ipynb
+kosr/checkpoint
+kosr/checkpoint/*
+kosr/data/Ksponspeech/*/*/*.record
+*.ipynb
