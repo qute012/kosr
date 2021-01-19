@@ -3,6 +3,8 @@ ipython_config.py
 kosr.egg-info
 build
 dist
+.ipynb_checkpoints
+__pycache__
 kosr/checkpoint
 kosr/checkpoint/*
 kosr/data/Ksponspeech/*/*/*.record
