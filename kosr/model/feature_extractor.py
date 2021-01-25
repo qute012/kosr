@@ -73,7 +73,7 @@ class W2VExtractor(nn.Module):
         self.post_extract_proj = nn.Linear(feature_size, hidden_size)
         self.dropout = nn.Dropout(p=proj_dropout_rate)
         
-    def forward(self, x, mask):
+    def forward(self, x, mask=None):
         x = x.unsqueeze(1)
         x = self.conv(x)
         B,C,T,F = x.size()

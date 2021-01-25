@@ -27,6 +27,7 @@ class Transformer(nn.Module):
         self.eos_id = eos_id
         self.init_type = init_type
         
+        self.feat_extractor = feat_extractor
         if feat_extractor=='vgg':
             self.conv = VGGExtractor()
         elif feat_extractor=='w2v':
