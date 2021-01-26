@@ -17,7 +17,7 @@ export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 export CFLAGS="-I$CUDA_HOME/include $CFLAGS"
 ```
 
-Install gcc5 and update alternatives
+Install gcc++5 and update alternatives
 
 ```
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
