@@ -32,7 +32,7 @@ def make_pad_mask(lengths, xs=None, length_dim=-1):
 def make_non_pad_mask(lengths, xs=None, length_dim=-1):
     return ~make_pad_mask(lengths, xs, length_dim)
 
-def subsequent_mask(size, device="cpu", dtype=torch.uint8):
+def subsequent_mask(size, device="cpu", dtype=torch.bool):
     ret = torch.ones(size, size, device=device, dtype=dtype)
     return torch.tril(ret, out=ret)
 
@@ -40,4 +40,4 @@ def subsequent_mask(size, device="cpu", dtype=torch.uint8):
 def target_mask(ys_in_pad, ignore_id):
     ys_mask = ys_in_pad != ignore_id
     m = subsequent_mask(ys_mask.size(-1), device=ys_mask.device).unsqueeze(0)
-    return ys_mask.unsqueeze(-2) & m
+    return (ys_mask.unsqueeze(-2) & m).eq(0)
