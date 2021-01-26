@@ -6,10 +6,8 @@ from kosr.model.transformer.sub_layer import *
 class DecoderLayer(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate):
         super(DecoderLayer, self).__init__()
-
-        self.self_attention_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
-        self.self_attention = MultiHeadAttention(n_head, hidden_dim, dropout_rate)
-        self.self_attention_dropout = nn.Dropout(dropout_rate)
+        self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
+        self.att = MultiHeadAttention(n_head, hidden_dim, dropout_rate)
 
         self.enc_dec_attention_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.enc_dec_attention = MultiHeadAttention(n_head, hidden_dim, dropout_rate)
