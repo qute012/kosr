@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
-from kosr.model.transformer.sub_layer import *
+from kosr.model.transformer.sub_layer import PositionalEncoding, FeedForwardNetwork
+from kosr.model.mask import make_non_pad_mask
 
 class EncoderLayer(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate):
@@ -35,6 +36,8 @@ class Encoder(nn.Module):
                     for _ in range(n_layers)])
 
     def forward(self, inputs, input_length):
+        mask = make_non_pad_mask(input_length, inputs)
+        
         encoder_output = self.dropout(inputs)
         for enc_layer in self.layers:
             encoder_output, mask = enc_layer(encoder_output, mask)
