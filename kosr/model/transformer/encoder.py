@@ -31,6 +31,8 @@ class EncoderLayer(nn.Module):
 class Encoder(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate, n_layers):
         super(Encoder, self).__init__()
+        self.scale = math.sqrt(hidden_dim)
+        self.pos_enc = PositionalEncoding(hidden_dim)
         self.dropout = nn.Dropout(dropout_rate)
         self.layers = nn.ModuleList([EncoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
                     for _ in range(n_layers)])
@@ -38,7 +40,7 @@ class Encoder(nn.Module):
     def forward(self, inputs, input_length):
         mask = make_non_pad_mask(input_length, inputs)
         
-        encoder_output = self.dropout(inputs)
+        encoder_output = self.dropout(inputs*self.scale + self.pos_enc(inputs.size(1)))
         for enc_layer in self.layers:
             encoder_output, mask = enc_layer(encoder_output, mask)
         return encoder_output, mask

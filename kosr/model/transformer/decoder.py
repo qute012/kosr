@@ -1,3 +1,5 @@
+import math
+
 import torch
 import torch.nn as nn
 from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
@@ -36,6 +38,7 @@ class Decoder(nn.Module):
     def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers):
         super(Decoder, self).__init__()
         self.emb = nn.Embedding(out_dim, hidden_dim)
+        self.scale = math.sqrt(hidden_dim)
         self.layers = nn.ModuleList([DecoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
                     for _ in range(n_layers)])
 
@@ -45,7 +48,7 @@ class Decoder(nn.Module):
     def forward(self, tgt, memory=None, memory_mask=None):
         tgt_mask = target_mask(tgt)
         
-        decoder_output = self.emb(tgt)
+        decoder_output = self.emb(tgt)*scale + self.pos_enc(tgt.size(1))
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)
         decoder_output = self.fc(self.last_norm(decoder_output))
