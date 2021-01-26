@@ -8,12 +8,12 @@ from kosr.model.transformer.decoder import Decoder
 class Transformer(nn.Module):
     def __init__(
         self, 
-        vocab_size, 
+        out_dim, 
         feat_extractor='vgg', 
         enc_n_layers=16, 
         dec_n_layers=1, 
-        hidden_size=512, 
-        filter_size=2048,
+        hidden_dim=512, 
+        filter_dim=2048,
         n_head=8,
         dropout_rate=0.1, 
         pad_id=0, 
@@ -33,31 +33,24 @@ class Transformer(nn.Module):
         elif feat_extractor=='w2v':
             self.conv = W2VExtractor()
             
-        self.encoder = Encoder(hidden_size, filter_size, n_head,
+        self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)
         
-        self.decoder = Decoder(hidden_size, filter_size,n_head,
+        self.decoder = Decoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, dec_n_layers)
+        
+        self.fc = nn.Linear(hidden_dim, out_dim)
         
         self.initialize()
 
-    def forward(self, padded_input, input_lengths, padded_target):
+    def forward(self, inputs, input_length, tgt):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             padded_input = self.conv(padded_input)
 
-        # Reshaping features
-        sizes = padded_input.size() # B x H_1 (channel?) x H_2 x T
-        padded_input = padded_input.view(sizes[0], sizes[1] * sizes[2], sizes[3])
-        padded_input = padded_input.transpose(1, 2).contiguous()  # BxTxH
-
-        encoder_padded_outputs, _ = self.encoder(padded_input, input_lengths)
-        pred, gold, *_ = self.decoder(padded_target, encoder_padded_outputs, input_lengths)
-        hyp_best_scores, hyp_best_ids = torch.topk(pred, 1, dim=2)
-
-        hyp_seq = hyp_best_ids.squeeze(2)
-        gold_seq = gold
-
-        return pred, gold, hyp_seq, gold_seq
+        enc_out, enc_mask = self.encoder(inputs, input_length)
+        pred = self.decoder(tgt, enc_out, enc_mask)
+        
+        return pred
 
     def initialize(self):
         # weight init
