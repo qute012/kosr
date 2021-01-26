@@ -1,6 +1,6 @@
 # Korean-Online-Speech-Recognition
 
-Implement [Transformer Transducer] : https://arxiv.org/pdf/2002.02562.pdf . This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
+Implement [Transformer Transducer]. This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
 
 # Installation
 
@@ -31,3 +31,5 @@ python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 ```
 pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
+
+[Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
