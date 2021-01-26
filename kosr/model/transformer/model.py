@@ -14,8 +14,8 @@ class Transformer(nn.Module):
         dec_n_layers=1, 
         hidden_dim=512, 
         filter_dim=2048,
-        n_head=8,
-        dropout_rate=0.1, 
+        n_head=32,
+        dropout_rate=0.1,
         pad_id=0, 
         sos_id=1, 
         eos_id=2,
@@ -36,10 +36,8 @@ class Transformer(nn.Module):
         self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)
         
-        self.decoder = Decoder(hidden_dim, filter_dim, n_head,
-                               dropout_rate, dec_n_layers)
-        
-        self.fc = nn.Linear(hidden_dim, out_dim)
+        self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
+                               n_head,dropout_rate, dec_n_layers)
         
         self.initialize()
 
@@ -49,7 +47,6 @@ class Transformer(nn.Module):
 
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
-        
         return pred
 
     def initialize(self):
