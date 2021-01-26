@@ -26,8 +26,7 @@ sudo apt-get install gcc-5 g++-5
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
 ```
 
-pytorch >= 1.7.0
-torchaudio >= 0.7.0
+pytorch >= 1.7.0 & torchaudio >= 0.7.0
 
 ```
 pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
