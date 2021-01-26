@@ -1,6 +1,6 @@
 # Korean-Online-Speech-Recognition
 
-Automatic speech recognition trained 1,000 hours KsponSpeech dataset.
+Implement [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf. This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
 
 # Installation
 
