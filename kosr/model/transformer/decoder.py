@@ -35,8 +35,11 @@ class DecoderLayer(nn.Module):
         return x
 
 class Decoder(nn.Module):
-    def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers):
+    def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers, pad_id, sos_id, eos_id):
         super(Decoder, self).__init__()
+        self.pad_id = pad_id
+        self.sos_id = sos_id
+        self.eos_id = eos_id
         self.embed = nn.Embedding(out_dim, hidden_dim)
         self.scale = math.sqrt(hidden_dim)
         self.layers = nn.ModuleList([DecoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
@@ -46,9 +49,9 @@ class Decoder(nn.Module):
         self.fc = nn.Linear(hidden_dim, out_dim)
 
     def forward(self, tgt, memory=None, memory_mask=None):
-        tgt_mask = target_mask(tgt)
+        tgt_mask = target_mask(tgt, ignore_id=self.pad_id)
         
-        decoder_output = self.embed(tgt)*scale + self.pos_enc(tgt)
+        decoder_output = self.embed(tgt)*self.scale
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)
         decoder_output = self.fc(self.last_norm(decoder_output))

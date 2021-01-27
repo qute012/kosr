@@ -12,7 +12,8 @@ class EncoderLayer(nn.Module):
         self.pos_enc = PositionalEncoding(hidden_dim)
         
         self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
-        self.rel_att = RelPositionMultiHeadAttention(hidden_dim, n_head, dropout_rate)
+        #self.rel_att = RelPositionMultiHeadAttention(hidden_dim, n_head, dropout_rate)
+        self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate)
 
         self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
@@ -21,7 +22,8 @@ class EncoderLayer(nn.Module):
     def forward(self, x, mask):
         x = self.att_norm(x)
         pos_enc = self.pos_enc(x)
-        y = self.self_attention(x, x, x, pos_enc, mask)
+        #y = self.rel_att(x, x, x, pos_enc, mask)
+        y = self.att(x,x,x,mask)
         x = x + y
 
         x = self.ffn_norm(x)
@@ -40,7 +42,7 @@ class Encoder(nn.Module):
                     for _ in range(n_layers)])
 
     def forward(self, inputs, input_length):
-        mask = make_non_pad_mask(input_length, inputs)
+        mask = make_non_pad_mask(input_length)
         
         encoder_output = self.dropout(inputs*self.scale + self.pos_enc(inputs))
         for enc_layer in self.layers:

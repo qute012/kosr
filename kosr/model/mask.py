@@ -27,7 +27,7 @@ def make_pad_mask(lengths, xs=None, length_dim=-1):
             slice(None) if i in (0, length_dim) else None for i in range(xs.dim())
         )
         mask = mask[ind].expand_as(xs).to(xs.device)
-    return mask
+    return mask.unsqueeze(1)
 
 def make_non_pad_mask(lengths, xs=None, length_dim=-1):
     return ~make_pad_mask(lengths, xs, length_dim)

@@ -39,13 +39,14 @@ class Transformer(nn.Module):
                                dropout_rate, enc_n_layers)
         
         self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
-                               n_head,dropout_rate, dec_n_layers)
+                               n_head,dropout_rate, dec_n_layers,
+                               pad_id, sos_id, eos_id)
         
         self.initialize()
 
     def forward(self, inputs, input_length, tgt):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
-            padded_input = self.conv(padded_input)
+            inputs,_ = self.conv(inputs)
 
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
@@ -66,7 +67,7 @@ class Transformer(nn.Module):
             tgt = torch.zeros(btz,1, dtype=torch.long).to(device)
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
-            padded_input = self.conv(padded_input)
+            inputs,_ = self.conv(inputs)
 
         enc_out, enc_mask = self.encoder(inputs, input_length)
         y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
