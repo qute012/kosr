@@ -39,8 +39,7 @@ class Transformer(nn.Module):
                                dropout_rate, enc_n_layers)
         
         self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
-                               n_head,dropout_rate, dec_n_layers,
-                               pad_id, sos_id, eos_id)
+                               n_head,dropout_rate, dec_n_layers, pad_id)
         
         self.initialize()
 
