@@ -8,7 +8,7 @@ from kosr.model.transformer.decoder import Decoder
 class Transformer(nn.Module):
     def __init__(
         self, 
-        out_dim, 
+        out_dim,
         feat_extractor='vgg', 
         enc_n_layers=16, 
         dec_n_layers=1, 
@@ -16,12 +16,14 @@ class Transformer(nn.Module):
         filter_dim=2048,
         n_head=32,
         dropout_rate=0.1,
+        max_len=300,
         pad_id=0, 
         sos_id=1, 
         eos_id=2,
         init_type="xavier_uniform"
     ):
         super(Transformer, self).__init__()
+        self.max_len = max_len
         self.pad_id = pad_id
         self.sos_id = sos_id
         self.eos_id = eos_id
@@ -48,7 +50,36 @@ class Transformer(nn.Module):
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
         return pred
+    
+    def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
+        if mode == 'greedy':
+            y_hats = self.greedy_search(inputs, input_length, tgt)
+        elif mode == 'beam':
+            y_hats = self.beam_search(inputs, input_length, tgt)
+            
+        return y_hats
+        
+    def greedy_search(self, inputs, input_length, tgt=None):
+        btz = inputs.size(0)
+        device = inputs.device
+        if tgt is None:
+            tgt = torch.zeros(btz,1, dtype=torch.long).to(device)
+        
+        if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
+            padded_input = self.conv(padded_input)
 
+        enc_out, enc_mask = self.encoder(inputs, input_length)
+        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
+        for step in range(self.max_len):
+            pred = self.decoder(tgt, enc_out, enc_mask)
+            y_hat = pred.topk(K=1)[1]
+            tgt = y_hat
+            y_hats[:,step] = y_hat.squeeze(dim=-1)
+        return y_hats
+        
+    def beam_search(self):
+        raise NotImplementedError
+    
     def initialize(self):
         # weight init
         for p in self.parameters():

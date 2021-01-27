@@ -1,10 +1,11 @@
+import math
 import torch
+
 from kosr.model.attention import *
 
 class PositionalEncoding(nn.Module):
     def __init__(self, dim_model, max_length=2000):
         super(PositionalEncoding, self).__init__()
-
         pe = torch.zeros(max_length, dim_model, requires_grad=False)
         position = torch.arange(0, max_length).unsqueeze(1).float()
         exp_term = torch.exp(torch.arange(0, dim_model, 2).float() * -(math.log(10000.0) / dim_model))
