@@ -1,9 +1,35 @@
 from torch.utils.data import Dataset, DataLoader
 
+from features import *
+from audio import *
+
 class SpeechDataset(Dataset):
-    def __init__(self):
+    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='../config/ksponspeech.yaml'):
         super(SpeechDataset, self).__init__()
-        raise NotImplementedError
+        self.root_dir = root_dir
+        with open(trn, 'r') as f:
+            self.data = f.read().strip().split('\n')
+        self.prep_data()
+        
+        with open(conf, 'r') as f:
+            self.conf = yaml.safe_load(f)
+            
+        self.transforms = Compose([
+            MelSpectrogram(**self.conf['feature']['spec']),
+            SpecAugment(prob=self.conf['feature']['augment']['spec_augment']),
+        ])
+        
+    def prep_data(self, symbol=' :: '):
+        """ 
+        Data preparations.
+        (A, B): Tuple => A: Audio file path, B: Transcript
+        """
+        temp = []
+        for line in self.data:
+            fname, script = line.split(' :: ')
+            fname = os.path.join(root_dir, fname)
+            temp.append((fname,script))
+        self.data = temp
         
     def __len__(self):
         raise NotImplementedError

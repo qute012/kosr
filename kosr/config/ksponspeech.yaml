@@ -1,3 +1,9 @@
+dataset:
+  root: '/root/storage/dataset/kspon'
+  train: '../data/Ksponspeech/train.trn'
+  valid: '../data/Ksponspeech/dev.trn'
+  test: '../data/Ksponspeech/eval_clean.trn'
+
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
@@ -15,7 +21,6 @@ model:
   pad_id: 0, 
   sos_id: 1, 
   eos_id: 2,
-  init_type: "xavier_uniform"
 
 optimizer:
   d_model: 512
@@ -37,7 +42,7 @@ feature:
     win_length: 512
     normalized: True
   augment:
-    spec_augment: True
-    time_shifting: False
-    noise_injecting: False
+    spec_augment: 0.5
+    time_shifting: 0
+    noise_injecting: 0
   
