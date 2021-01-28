@@ -2,8 +2,8 @@ import os
 import yaml
 from torch.utils.data import Dataset, DataLoader
 
-from features import *
-from audio import *
+from kosr.data.features import *
+from kosr.data.audio import *
 from kosr.utils.convert import char2id, id2char
 
 PAD_TOKEN = '<pad>'
@@ -12,7 +12,7 @@ SOS_TOKEN = '<sos>'
 EOS_TOKEN = '<eos>'
 
 class SpeechDataset(Dataset):
-    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='../config/ksponspeech.yaml'):
+    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='config/ksponspeech.yaml'):
         super(SpeechDataset, self).__init__()
         self.root_dir = root_dir
         with open(trn, 'r') as f:

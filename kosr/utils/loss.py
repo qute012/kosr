@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 
-
 class LabelSmoothingLoss(nn.Module):
     """Label-smoothing loss.
     :param int size: the number of class

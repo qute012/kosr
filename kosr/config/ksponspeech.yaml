@@ -1,8 +1,8 @@
 dataset:
   root: '/root/storage/dataset/kspon'
-  train: '../data/Ksponspeech/train.trn'
-  valid: '../data/Ksponspeech/dev.trn'
-  test: '../data/Ksponspeech/eval_clean.trn'
+  train: 'data/Ksponspeech/train.trn'
+  valid: 'data/Ksponspeech/dev.trn'
+  test: 'data/Ksponspeech/eval_clean.trn'
 
 setting:
   model_type: 'transformer'

@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
-from kosr.utils.metric import metrics
+from kosr.utils.metrics import metrics
 
 def train(model, optimizer, criterion, dataloader, epoch, max_norm=400):
     losses = 0.

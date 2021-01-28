@@ -53,7 +53,7 @@ def seq_to_str(seqs, id2char):
         sentence = str()
         for idx in seqs:
             idx = idx.item()
-            if idx==sos_id or idx==pad_id or idx=unk_id:
+            if idx==sos_id or idx==pad_id or idx==unk_id:
                 continue
             if idx==eos_id:
                 break
@@ -66,7 +66,7 @@ def seq_to_str(seqs, id2char):
             sentence = str()
             for idx in seqs:
                 idx = idx.item()
-                if idx==sos_id or idx==pad_id or idx=unk_id:
+                if idx==sos_id or idx==pad_id or idx==unk_id:
                     continue
                 if idx==eos_id:
                     break

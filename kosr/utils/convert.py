@@ -1,6 +1,6 @@
 import json
 
-with open('Ksponspeech/kspon_labels.json', 'r') as f:
+with open('data/Ksponspeech/kspon_labels.json', 'r') as f:
         vocab = json.load(f)
         
 id2char = list(vocab)
