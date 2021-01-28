@@ -57,7 +57,7 @@ class SpeechDataset(Dataset):
                 seq.append(char2id.get(c))
             else:
                 if UNK_TOKEN is not None:
-                    seq.append(char2id.get(unk))
+                    seq.append(char2id.get(UNK_TOKEN))
                 else:
                     continue
         seq.append(char2id.get(EOS_TOKEN))
