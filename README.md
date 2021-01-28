@@ -33,5 +33,11 @@ python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
+# Model Architecture
+
+Transformer encoder using multi-head attention with relative positional encoding
+![image](https://user-images.githubusercontent.com/33983084/106131771-72989600-61a6-11eb-9317-0ef5eefe51b5.png)
+
+
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
