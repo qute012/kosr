@@ -9,7 +9,7 @@ logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
 eval_log = "[{}] loss: {} cer: {} wer: {}"
 
-def valid(model, optimizer, criterion, dataloader):
+def evaluate(model, optimizer, criterion, dataloader):
     losses = 0.
     cer_sum = 0.
     wer_sum = 0.
