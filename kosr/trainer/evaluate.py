@@ -22,8 +22,6 @@ def evaluate(model, optimizer, criterion, dataloader):
             if torch.cuda.is_available():
                 inputs = inputs.cuda()
                 targets = targets.cuda()
-                input_length = input_length.cuda()
-                target_length = target_length.cuda()
 
             preds, y_hats = model.recognize(inputs. input_length)
 

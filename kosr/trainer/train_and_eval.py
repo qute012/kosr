@@ -24,8 +24,6 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         if torch.cuda.is_available():
             inputs = inputs.cuda()
             targets = targets.cuda()
-            input_length = input_length.cuda()
-            target_length = target_length.cuda()
         
         preds = model(inputs. input_length, targets)
         
@@ -59,8 +57,6 @@ def valid(model, optimizer, criterion, dataloader, epoch):
             if torch.cuda.is_available():
                 inputs = inputs.cuda()
                 targets = targets.cuda()
-                input_length = input_length.cuda()
-                target_length = target_length.cuda()
 
             preds, y_hats = model.recognize(inputs. input_length)
 
