@@ -34,7 +34,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         losses += loss.item()
         
         y_hats = preds.max(-1)[1]
-        
+
         _cer, _wer = metrics(y_hats, targets)
         cer += _cer
         wer += _wer

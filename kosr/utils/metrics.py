@@ -43,7 +43,7 @@ def cer(s1, s2):
     return Lev.distance(s1, s2)
 
 def seq_to_str(seqs, id2char):
-    assert len(seq)<=2, 'can not convert 3-dimensional sequence to string'
+    assert len(seqs.shape)<=2, 'can not convert 3-dimensional sequence to string'
     pad_id = id2char.index(PAD_TOKEN)
     unk_id = id2char.index(UNK_TOKEN)
     sos_id = id2char.index(SOS_TOKEN)
@@ -64,7 +64,7 @@ def seq_to_str(seqs, id2char):
         sentences = list()
         for seq in seqs:
             sentence = str()
-            for idx in seqs:
+            for idx in seq:
                 idx = idx.item()
                 if idx==sos_id or idx==pad_id or idx==unk_id:
                     continue
