@@ -37,7 +37,7 @@ pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org
 
 Transformer encoder using multi-head attention with relative positional encoding
 
-![image](https://user-images.githubusercontent.com/33983084/106131771-72989600-61a6-11eb-9317-0ef5eefe51b5.png)
+![image](https://user-images.githubusercontent.com/33983084/106132024-bf7c6c80-61a6-11eb-9db9-785892396558.png)
 
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
