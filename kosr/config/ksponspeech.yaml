@@ -9,15 +9,14 @@ setting:
   opt_type: 'noam'
 
 model:
-  out_dim: ???
   feat_extractor: 'vgg'
-  enc_n_layers: 16
+  enc_n_layers: 14
   dec_n_layers: 1 
   hidden_dim: 512 
-  filter_dim: 204,
+  filter_dim: 204
   n_head: 32
   dropout_rate: 0.1
-  max_len: 300
+  max_len: 400
   pad_id: 0
   sos_id: 1 
   eos_id: 2
