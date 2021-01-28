@@ -24,7 +24,7 @@ def main():
     optimizer = get_std_opt(model.parameters(), **conf['optimizer'])
     
     for epoch in range(30):
-        #train(model, optimizer, criterion, train_dataloader, epoch)
+        train(model, optimizer, criterion, train_dataloader, epoch)
         valid(model, optimizer, criterion, valid_dataloader, epoch)
 
 if __name__ == '__main__':

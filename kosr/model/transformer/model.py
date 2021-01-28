@@ -69,12 +69,12 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
 
         enc_out, enc_mask = self.encoder(inputs, input_length)
-        preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.long).to(device)
+        preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
         y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
         for step in range(self.max_len):
             pred = self.decoder(tgt, enc_out, enc_mask)
-            preds[:,step,:] = pred
-            y_hat = pred.topk(K=1)[1]
+            preds[:,step,:] = pred.squeeze(-2)
+            y_hat = pred.max(-1)[1]
             tgt = y_hat
             y_hats[:,step] = y_hat.squeeze(dim=-1)
         return preds, y_hats

@@ -60,7 +60,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
                 targets = targets.cuda()
 
             preds, y_hats = model.recognize(inputs, input_length)
-            loss = criterion(preds, targets)
+            loss = criterion(preds[:,:targets.size(1),:].contiguous(), targets)
 
             losses += loss.item()
 
