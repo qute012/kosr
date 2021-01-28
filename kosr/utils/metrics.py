@@ -3,7 +3,7 @@ from kosr.data.dataset import PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
 from kosr.utils.convert import char2id, id2char
 
 def metrics(preds, targets):
-    btz = target.size(0)
+    btz = targets.size(0)
     cers = 0.
     wers = 0.
     preds_str = seq_to_str(preds, id2char)

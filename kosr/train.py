@@ -14,9 +14,10 @@ def main():
     with open(conf, 'r') as f:
         conf = yaml.safe_load(f)
         
-    train_dataloader = get_dataloader('data/Ksponspeech/train.trn')
-    valid_dataloader = get_dataloader('data/Ksponspeech/dev.trn')
-    test_dataloader = get_dataloader('data/Ksponspeech/eval_clean.trn')
+    batch_size = 8
+    train_dataloader = get_dataloader('data/Ksponspeech/train.trn', batch_size=batch_size)
+    valid_dataloader = get_dataloader('data/Ksponspeech/dev.trn', batch_size=batch_size)
+    test_dataloader = get_dataloader('data/Ksponspeech/eval_clean.trn', batch_size=batch_size)
     
     model = Transformer(len(vocab)).cuda()
     criterion = LabelSmoothingLoss(len(vocab), padding_idx=0, smoothing=0.1).cuda()
