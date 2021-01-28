@@ -23,7 +23,7 @@ def evaluate(model, optimizer, criterion, dataloader):
                 inputs = inputs.cuda()
                 targets = targets.cuda()
 
-            preds, y_hats = model.recognize(inputs. input_length)
+            preds, y_hats = model.recognize(inputs, input_length)
 
             loss = criterion(preds.view(-1, preds.size(-1)), targets[:,1:].view(-1))
 

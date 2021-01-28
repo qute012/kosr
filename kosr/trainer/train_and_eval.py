@@ -25,7 +25,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             inputs = inputs.cuda()
             targets = targets.cuda()
         
-        preds = model(inputs. input_length, targets)
+        preds = model(inputs, input_length, targets)
         
         loss = criterion(preds.view(-1, preds.size(-1)), targets[:,1:].view(-1))
         loss.backward()
@@ -58,7 +58,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
                 inputs = inputs.cuda()
                 targets = targets.cuda()
 
-            preds, y_hats = model.recognize(inputs. input_length)
+            preds, y_hats = model.recognize(inputs, input_length)
 
             loss = criterion(preds.view(-1, preds.size(-1)), targets[:,1:].view(-1))
 
