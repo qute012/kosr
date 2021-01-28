@@ -36,6 +36,7 @@ class SpeechDataset(Dataset):
         for line in self.data:
             fname, script = line.split(' :: ')
             fname = os.path.join(self.root_dir, fname)
+            script = script.replace('[UNK] ','')
             temp.append((fname,script))
         self.data = temp
         
@@ -78,7 +79,13 @@ class FileDataset(Dataset):
         
 def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='valid'):
     shuffle = True if mode=='train' else False
-    return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+    if mode=='train':
+        dataset = SpeechDataset(trn, root_dir)
+        dataset.data = dataset.data[:100000]
+    else:
+        dataset = SpeechDataset(trn, root_dir)
+        dataset.data = dataset.data[:1000]
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
 def _collate_fn(batch):

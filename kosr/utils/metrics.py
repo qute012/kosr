@@ -9,14 +9,17 @@ def metrics(preds, targets):
     preds_str = seq_to_str(preds, id2char)
     golds_str = seq_to_str(targets, id2char)
     for i, (pred,gold) in enumerate(zip(preds_str,golds_str)):
-        try:
+        if gold=="":
+            """only unk token"""
+            length = len(golds[i][1:-1])
+            cers += cer(pred,gold)/length
+            length = 1
+            wers += wer(pred,gold)/length
+        else:
             length = len(gold.replace(' ',''))
             cers += cer(pred,gold)/length
             length = len(gold.split())
             wers += wer(pred,gold)/length
-        except:
-            print(pred, gold)
-            assert 1==0
     return cers/btz, wers/btz
 
 def wer(s1, s2):
@@ -47,12 +50,13 @@ def cer(s1, s2):
     return Lev.distance(s1, s2)
 
 def seq_to_str(seqs, id2char):
-    assert len(seqs.shape)<=2, 'can not convert 3-dimensional sequence to string'
+    #assert len(seqs.shape)<=2, 'can not convert 3-dimensional sequence to string'
     pad_id = id2char.index(PAD_TOKEN)
     unk_id = id2char.index(UNK_TOKEN)
     sos_id = id2char.index(SOS_TOKEN)
     eos_id = id2char.index(EOS_TOKEN)
     
+    unk_cnt = 0
     if len(seqs.shape) == 1:
         sentence = str()
         for idx in seqs:

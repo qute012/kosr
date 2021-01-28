@@ -10,7 +10,7 @@ setting:
 
 model:
   feat_extractor: 'vgg'
-  enc_n_layers: 14
+  enc_n_layers: 16
   dec_n_layers: 1 
   hidden_dim: 512 
   filter_dim: 204
@@ -28,7 +28,7 @@ optimizer:
 
 train:
   device: 'cuda'
-  batch_size: 16
+  batch_size: 4
   epochs: 50
   save_epoch: 1
   
