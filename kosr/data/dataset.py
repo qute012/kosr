@@ -19,7 +19,7 @@ class SpeechDataset(Dataset):
             
         self.transforms = Compose([
             MelSpectrogram(**self.conf['feature']['spec']),
-            SpecAugment(prob=self.conf['feature']['augment']['spec_augment']),
+            SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
         ])
         
     def prep_data(self, symbol=' :: '):
@@ -40,9 +40,8 @@ class SpeechDataset(Dataset):
     def __getitem__(self, index):
         fname, script = self.data[index]
         sig, sr = load_audio(fname)
-        spec = self.transforms(sig)
+        spec = self.transforms(sig).transpose(1,0)
         seq = self.scr_to_seq(script)
-        
         return spec, seq
         
     def scr_to_seq(self, scr, unk='<unk>'):

@@ -16,6 +16,6 @@ def load_audio(path, sr=16000, out_tensor=True):
         sig, sr = sf.read(path, sr)
     
     if out_tensor:
-        return torch.FloatTensor(sig).unsqueeze(0), sr
+        return torch.FloatTensor(sig), sr
     else:
         return sig, sr

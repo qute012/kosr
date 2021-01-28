@@ -7,5 +7,5 @@ id2char = list(vocab)
 char2id = dict()
 
 for i, c in enumerate(id2char):
-    char2id[i] = c
+    char2id[c] = i
     

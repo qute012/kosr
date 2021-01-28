@@ -39,7 +39,6 @@ class MelSpectrogram(object):
         mel = self.amplitude_to_db(mel)
         if self.normalized:
             mel = self.norm(mel)
-
         return mel
 
 class SpecAugment(object):
