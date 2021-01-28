@@ -39,12 +39,21 @@ class SpeechDataset(Dataset):
         fname, script = self.data[index]
         sig, sr = load_audio(fname)
         spec = transforms(self.sig)
+        seq = self.scr_to_seq(script)
         
-    def scr_to_seq(self, scr, unk=True):
+        return spec, seq
+        
+    def scr_to_seq(self, scr, unk='<unk>'):
         seq = list()
-        if unk:
             for c in scr:
-                if not c in id2char
+                if c in id2char:
+                    seq.append(char2id.get(c))
+                else:
+                    if unk:
+                        seq.append(char2id.get(unk))
+                    else:
+                        continue
+        return seq
         
 
 
