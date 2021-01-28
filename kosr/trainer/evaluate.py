@@ -7,12 +7,13 @@ from kosr.utils.metrics import metrics
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-eval_log = "[{}] loss: {} cer: {} wer: {}"
+eval_log = "[{}] loss: {:.2f} cer: {:.2f} wer: {:.2f}"
 
 def evaluate(model, optimizer, criterion, dataloader):
     losses = 0.
-    cer_sum = 0.
-    wer_sum = 0.
+    cer = 0.
+    wer = 0.
+    step = 0
     model.eval()
     pbar = tqdm(dataloader)
     with torch.no_grad():

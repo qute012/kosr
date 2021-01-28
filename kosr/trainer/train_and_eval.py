@@ -7,13 +7,14 @@ from kosr.utils.metrics import metrics
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-train_log = "[{}] epoch: {} loss: {} cer: {} last batch cer: {}"
-valid_log = "[{}] epoch: {} loss: {} cer: {} wer: {}"
+train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} last batch cer: {:.2f}"
+valid_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} wer: {:.2f}"
 
 def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_step=100):
     losses = 0.
-    cer_sum = 0.
-    wer_sum = 0.
+    cer = 0.
+    wer = 0.
+    step = 0
     model.train()
     pbar = tqdm(dataloader)
     for batch in pbar:
@@ -39,14 +40,15 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         cer += _cer
         wer += _wer
         step += 1
-        pbar.set_description(log_info.format(epoch, losses/step, cer/step, _cer))
+        pbar.set_description(train_log.format('training', epoch, losses/step, cer/step, _cer))
         if step%print_step==0:
             logging.info(train_log.format('training', epoch, losses/step, cer/step, _cer))
         
 def valid(model, optimizer, criterion, dataloader, epoch):
     losses = 0.
-    cer_sum = 0.
-    wer_sum = 0.
+    cer = 0.
+    wer = 0.
+    step = 0
     model.eval()
     pbar = tqdm(dataloader)
     with torch.no_grad():
