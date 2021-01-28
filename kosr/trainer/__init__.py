@@ -1,1 +1,1 @@
-from kosr.trainer.trainer import *
+from kosr.trainer.train_and_eval import train
