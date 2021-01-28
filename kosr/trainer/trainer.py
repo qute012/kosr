@@ -23,20 +23,17 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=150):
             
         n_samples += inputs.size(0)
         
-        target = y[:, 1:].contiguous().cuda()
-        teacher_forcing_rate = scheduler_sampling(epoch)
-        logits = model(x, ground_truth=y, teacher_forcing_rate=teacher_forcing_rate)
-
-        y_hats = torch.max(logits, dim=-1)[1]
-        #print(label_to_string(target, id2char))
-        loss = criterion(logits.view(-1, logits.size(-1)), target.view(-1))
-
-        total_loss += loss.item()
-        num_samples += batch_size
-
+        preds = model(inputs. input_length, targets)
+        
+        loss = criterion(preds.view(-1, preds.size(-1)), targets[:,1:].view(-1))
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=max_norm)
         optimizer.step()
+        
+        total_loss += loss.item()
+        
+        y_hats = preds.max(-1)[1]
+        
         cer_, wer_ = score(y_hats.long(), target)
         cer += cer_
         wer += wer_
