@@ -1,5 +1,19 @@
 import Levenshtein as Lev
 from kosr.data.dataset import PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
+from kosr.utils.convert import char2id, id2char
+
+def metrics(preds, targets):
+    btz = target.size(0)
+    cers = 0.
+    wers = 0.
+    preds_str = seq_to_str(preds, id2char)
+    golds_str = seq_to_str(targets, id2char)
+    for i, (pred,gold) in enumerate(zip(preds_str,golds_str)):
+        length = len(gold.replace(' ',''))
+        cers += cer(pred,gold)/length
+        length = len(gold.split())
+        wers += wer(pred,gold)/length
+    return cers/btz, wers/btz
 
 def wer(s1, s2):
     """
@@ -28,7 +42,7 @@ def cer(s1, s2):
     s1, s2, = s1.replace(' ', ''), s2.replace(' ', '')
     return Lev.distance(s1, s2)
 
-def seq_to_string(seqs, id2char):
+def seq_to_str(seqs, id2char):
     assert len(seq)<=2, 'can not convert 3-dimensional sequence to string'
     pad_id = id2char.index(PAD_TOKEN)
     unk_id = id2char.index(UNK_TOKEN)
