@@ -62,7 +62,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
                 input_length = input_length.cuda()
                 target_length = target_length.cuda()
 
-            preds, y_hats = greedy_search(inputs. input_length)
+            preds, y_hats = model.recognize(inputs. input_length)
 
             loss = criterion(preds.view(-1, preds.size(-1)), targets[:,1:].view(-1))
 
