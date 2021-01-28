@@ -24,6 +24,7 @@ class Transformer(nn.Module):
     ):
         super(Transformer, self).__init__()
         self.max_len = max_len
+        self.out_dim = out_dim
         self.pad_id = pad_id
         self.sos_id = sos_id
         self.eos_id = eos_id

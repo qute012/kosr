@@ -9,10 +9,14 @@ def metrics(preds, targets):
     preds_str = seq_to_str(preds, id2char)
     golds_str = seq_to_str(targets, id2char)
     for i, (pred,gold) in enumerate(zip(preds_str,golds_str)):
-        length = len(gold.replace(' ',''))
-        cers += cer(pred,gold)/length
-        length = len(gold.split())
-        wers += wer(pred,gold)/length
+        try:
+            length = len(gold.replace(' ',''))
+            cers += cer(pred,gold)/length
+            length = len(gold.split())
+            wers += wer(pred,gold)/length
+        except:
+            print(pred, gold)
+            assert 1==0
     return cers/btz, wers/btz
 
 def wer(s1, s2):
