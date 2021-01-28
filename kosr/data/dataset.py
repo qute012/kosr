@@ -6,6 +6,11 @@ from features import *
 from audio import *
 from kosr.utils.convert import char2id, id2char
 
+PAD_TOKEN = '<pad>'
+UNK_TOKEN = '<unk>'
+SOS_TOKEN = '<sos>'
+EOS_TOKEN = '<eos>'
+
 class SpeechDataset(Dataset):
     def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='../config/ksponspeech.yaml'):
         super(SpeechDataset, self).__init__()
@@ -44,16 +49,18 @@ class SpeechDataset(Dataset):
         seq = self.scr_to_seq(script)
         return spec, seq
         
-    def scr_to_seq(self, scr, unk='<unk>'):
+    def scr_to_seq(self, scr):
         seq = list()
+        seq.append(char2id.get(SOS_TOKEN))
         for c in scr:
             if c in id2char:
                 seq.append(char2id.get(c))
             else:
-                if unk:
+                if UNK_TOKEN is not None:
                     seq.append(char2id.get(unk))
                 else:
                     continue
+        seq.append(char2id.get(EOS_TOKEN))
         return seq
         
 
