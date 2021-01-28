@@ -45,8 +45,7 @@ class Transformer(nn.Module):
 
     def forward(self, inputs, input_length, tgt):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
-            inputs,_ = self.conv(inputs)
-
+            inputs,input_length = self.conv(inputs), input_length>>2
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
         return pred
@@ -66,7 +65,7 @@ class Transformer(nn.Module):
             tgt = torch.zeros(btz,1, dtype=torch.long).to(device)
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
-            inputs,_ = self.conv(inputs)
+            inputs,input_length = self.conv(inputs), input_length>>2
 
         enc_out, enc_mask = self.encoder(inputs, input_length)
         preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.long).to(device)

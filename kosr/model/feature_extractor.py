@@ -1,21 +1,6 @@
 import torch
 import torch.nn as nn
 
-def compute_mask(mask):
-    """Create a subsampled version of x_mask.
-    Args:
-        x_mask: Input mask (B, 1, T)
-    Returns:
-        x_mask: Output mask (B, 1, sub(T))
-    """
-    t1 = mask.size(2) - (mask.size(2) % 3)
-    mask = mask[:, :, :t1][:, :, ::3]
-
-    t2 = mask.size(2) - (mask.size(2) % 2)
-    mask = mask[:, :, :t2][:, :, ::2]
-
-    return mask
-
 class VGGExtractor(nn.Module):
     def __init__(self, in_dim=80, feature_dim=128, hidden_dim=512, proj_dropout_rate=0.1):
         super(VGGExtractor,self).__init__()
@@ -31,19 +16,17 @@ class VGGExtractor(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(2, stride=2)
         )
-        sub_sampling_dim = (((in_dim)//2)//2)
+        sub_sampling_dim = in_dim>>2
         self.post_extract_proj = nn.Linear(sub_sampling_dim*feature_dim, hidden_dim)
         self.dropout = nn.Dropout(p=proj_dropout_rate)
         
-    def forward(self, x, mask=None):
+    def forward(self, x):
         x = x.unsqueeze(1)
         x = self.conv(x)
         B,C,T,F = x.size()
         x = self.post_extract_proj(x.transpose(1,2).contiguous().view(B,T,C*F))
         x = self.dropout(x)
-        if mask is None:
-            return x, mask
-        return x, compute_mask(mask)
+        return x
         
 class W2VExtractor(nn.Module):
     def __init__(self, in_dim=80, feature_dim=512, hidden_dim=512, conv_dropout_rate=0.0, proj_dropout_rate=0.1):
@@ -75,12 +58,10 @@ class W2VExtractor(nn.Module):
         self.post_extract_proj = nn.Linear(sub_sampling_dim*feature_dim, hidden_dim)
         self.dropout = nn.Dropout(p=proj_dropout_rate)
         
-    def forward(self, x, mask=None):
+    def forward(self, x):
         x = x.unsqueeze(1)
         x = self.conv(x)
         B,C,T,F = x.size()
         x = self.post_extract_proj(x.transpose(1,2).contiguous().view(B,T,C*F))
         x = self.dropout(x)
-        if mask is None:
-            return x, mask
-        return x, compute_mask(mask)
+        return x

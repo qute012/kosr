@@ -47,7 +47,8 @@ class Decoder(nn.Module):
         self.fc = nn.Linear(hidden_dim, out_dim)
 
     def forward(self, tgt, memory=None, memory_mask=None):
-        tgt_mask = target_mask(tgt, ignore_id=self.pad_id)
+        tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-2)
+        print(tgt.shape, tgt_mask.shape)
         
         decoder_output = self.embed(tgt)*self.scale
         for i, dec_layer in enumerate(self.layers):

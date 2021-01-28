@@ -41,3 +41,18 @@ def target_mask(ys_in_pad, ignore_id):
     ys_mask = ys_in_pad != ignore_id
     m = subsequent_mask(ys_mask.size(-1), device=ys_mask.device).unsqueeze(0)
     return (ys_mask.unsqueeze(-2) & m).eq(0)
+
+def compute_mask(mask):
+    """Create a subsampled version of x_mask.
+    Args:
+        x_mask: Input mask (B, 1, T)
+    Returns:
+        x_mask: Output mask (B, 1, sub(T))
+    """
+    t1 = mask.size(2) - (mask.size(2) % 3)
+    mask = mask[:, :, :t1][:, :, ::3]
+
+    t2 = mask.size(2) - (mask.size(2) % 2)
+    mask = mask[:, :, :t2][:, :, ::2]
+
+    return mask

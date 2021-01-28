@@ -1,13 +1,13 @@
+import warnings
+import yaml
+warnings.filterwarnings('ignore')
+
 from kosr.model import Transformer
 from kosr.trainer import train
 from kosr.utils.loss import LabelSmoothingLoss
 from kosr.utils.optimizer import get_std_opt
 from kosr.data.dataset import get_dataloader
 from kosr.utils.convert import vocab
-
-import warnings
-import yaml
-warnings.filterwarnings('ignore')
 
 def main():
     conf = 'config/ksponspeech.yaml'

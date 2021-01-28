@@ -32,9 +32,10 @@ class MultiHeadAttention(nn.Module):
         n_batch = value.size(0)
         
         if mask is not None:
+            #print(scores.shape, mask.shape)
             scores = scores.masked_fill(mask, -1e-9)
 
-        self.attn = torch.softmax(scores, dim=-1)
+        self.attn = torch.softmax(scores, dim=-1).masked_fill(mask, 0.0)
 
         p_attn = self.dropout(self.attn)
         x = torch.matmul(p_attn, value)
@@ -44,11 +45,11 @@ class MultiHeadAttention(nn.Module):
 
     def forward(self, query, key, value, mask=None):
         btz = query.size(0)
-        q, k, v = self.forward_qkv(query, key, value)
         
+        q, k, v = self.forward_qkv(query, key, value)
         if mask is not None:
-            mask = mask.unsqueeze(1).repeat(1, self.n_head, 1, 1)
-            
+            mask = mask.repeat(1, self.n_head, 1, 1)
+        
         scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.d_k)
         return self.forward_attention(v, scores, mask)
 
