@@ -43,10 +43,10 @@ class MelSpectrogram(object):
         return mel
 
 class SpecAugment(object):
-    def __init__(self, frequency_mask_max_percentage=0.3, time_mask_max_percentage=0.1, probability=0.5):
+    def __init__(self, frequency_mask_max_percentage=0.3, time_mask_max_percentage=0.1, prob=0.5):
         self.frequency_mask_probability = frequency_mask_max_percentage
         self.time_mask_probability = time_mask_max_percentage
-        self.probability = probability
+        self.probability = prob
 
     def __call__(self, spec):
         if random.random() < self.probability:

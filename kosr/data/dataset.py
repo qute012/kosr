@@ -1,3 +1,5 @@
+import os
+import yaml
 from torch.utils.data import Dataset, DataLoader
 
 from features import *
@@ -28,7 +30,7 @@ class SpeechDataset(Dataset):
         temp = []
         for line in self.data:
             fname, script = line.split(' :: ')
-            fname = os.path.join(root_dir, fname)
+            fname = os.path.join(self.root_dir, fname)
             temp.append((fname,script))
         self.data = temp
         
@@ -38,21 +40,21 @@ class SpeechDataset(Dataset):
     def __getitem__(self, index):
         fname, script = self.data[index]
         sig, sr = load_audio(fname)
-        spec = transforms(self.sig)
+        spec = self.transforms(sig)
         seq = self.scr_to_seq(script)
         
         return spec, seq
         
     def scr_to_seq(self, scr, unk='<unk>'):
         seq = list()
-            for c in scr:
-                if c in id2char:
-                    seq.append(char2id.get(c))
+        for c in scr:
+            if c in id2char:
+                seq.append(char2id.get(c))
+            else:
+                if unk:
+                    seq.append(char2id.get(unk))
                 else:
-                    if unk:
-                        seq.append(char2id.get(unk))
-                    else:
-                        continue
+                    continue
         return seq
         
 
@@ -73,7 +75,7 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
-def collate_fn(batch):
+def _collate_fn(batch):
     """ functions that pad to the maximum sequence length """
     def seq_length_(p):
         return len(p[0])
