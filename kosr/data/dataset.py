@@ -2,6 +2,7 @@ from torch.utils.data import Dataset, DataLoader
 
 from features import *
 from audio import *
+from kosr.utils.convert import char2id, id2char
 
 class SpeechDataset(Dataset):
     def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='../config/ksponspeech.yaml'):
@@ -32,10 +33,19 @@ class SpeechDataset(Dataset):
         self.data = temp
         
     def __len__(self):
-        raise NotImplementedError
+        return len(self.data)
     
-    def __getitem__(self, idx):
-        raise NotImplementedError
+    def __getitem__(self, index):
+        fname, script = self.data[index]
+        sig, sr = load_audio(fname)
+        spec = transforms(self.sig)
+        
+    def scr_to_seq(self, scr, unk=True):
+        seq = list()
+        if unk:
+            for c in scr:
+                if not c in id2char
+        
 
 
 class FileDataset(Dataset):
