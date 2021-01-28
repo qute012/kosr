@@ -67,7 +67,12 @@ class FileDataset(Dataset):
     
     def __getitem__(self, idx):
         raise NotImplementedError
-            
+        
+def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='train'):
+    shuffle = True if mode=='train' else False
+    return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+                              collate_fn=_collate_fn, num_workers=8)
+        
 def collate_fn(batch):
     """ functions that pad to the maximum sequence length """
     def seq_length_(p):
