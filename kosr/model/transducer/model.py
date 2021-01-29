@@ -73,11 +73,12 @@ class Transducer(nn.Module):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
 
-        enc_out, enc_mask = self.encoder(inputs, input_length)
+        enc_state, enc_mask = self.encoder(inputs, input_length)
         preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
         y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
         for step in range(self.max_len):
-            pred = self.decoder(tgt, enc_out, enc_mask)
+            dec_state = self.decoder(tgt)
+            pred = self.jointer(enc_state, dec_state)
             preds[:,step,:] = pred.squeeze(-2)
             y_hat = pred.max(-1)[1]
             tgt = y_hat
