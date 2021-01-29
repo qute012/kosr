@@ -3,7 +3,7 @@
 Implement [Transformer Transducer]. This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
 KsponSpeech dataset was processed by referring to [here].
 
-# Installation
+# Environment
 
 Warp-transducer needs to install gcc++5 and export CUDA environment variable.
 
@@ -31,6 +31,12 @@ python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 
 ```
 pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
+# Usage
+Before training, you should already get Ai-Hub dataset. And you needs to check configuration in conf directory and set batch size as fittable as your gpu environment.
+```
+python train.py
 ```
 
 # Model Architecture
