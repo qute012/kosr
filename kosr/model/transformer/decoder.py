@@ -1,6 +1,7 @@
 import math
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
 from kosr.model.transformer.sub_layer import FeedForwardNetwork
@@ -53,4 +54,4 @@ class Decoder(nn.Module):
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)
         decoder_output = self.fc(self.last_norm(decoder_output))
-        return decoder_output
+        return F.log_softmax(decoder_output)

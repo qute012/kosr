@@ -4,8 +4,7 @@ import yaml
 warnings.filterwarnings('ignore')
 
 from kosr.model import Transformer
-from kosr.trainer import train, valid, save
-from kosr.utils import make_chk
+from kosr.trainer import train, valid
 from kosr.utils.loss import LabelSmoothingLoss
 from kosr.utils.optimizer import get_std_opt
 from kosr.data.dataset import get_dataloader

@@ -3,12 +3,38 @@ import torch.nn as nn
 from tqdm import tqdm
 
 from kosr.utils.metrics import metrics
+from kosr.utils import make_chk, train_log, valid_log, epoch_log
+from kosr.trainer import save
 
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} lr: {:.7f}"
-valid_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} wer: {:.2f}"
+def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=400, print_step=100, epoch_save=True):
+    best_loss = 10101.0
+    bl_epoch = 0
+    best_wer = 101.0
+    bw_epoch = 0
+    chk_path = make_chk()
+    
+    for epoch in epochs:
+        train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
+        valid_loss, valid_wer = valid(model, optimizer, criterion, valid_dataloader, epoch)
+        if best_loss>valid_loss:
+            best_loss = valid_loss
+            bl_epoch = epoch
+            save(os.path.join(chk_path, 'best_loss.pth'), epoch, model, optimizer, loss)
+            
+        if best_wer>valid_wer:
+            best_wer = valid_wer
+            bw_epoch = epoch
+            save(os.path.join(chk_path, 'best_wer.pth'), epoch, model, optimizer, loss)
+        
+        if epoch_save:
+            save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, loss)
+            
+        logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss)
+            
+            
 
 def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_step=100):
     losses = 0.
@@ -45,6 +71,8 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         pbar.set_description(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
         if step%print_step==0:
             logging.info(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
+            
+    return losses, wer
         
 def valid(model, optimizer, criterion, dataloader, epoch):
     losses = 0.
@@ -73,3 +101,5 @@ def valid(model, optimizer, criterion, dataloader, epoch):
             step += 1
             pbar.set_description(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
     logging.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
+    
+    return losses, wer

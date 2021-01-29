@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from kosr.model.feature_extractor import *
 from kosr.model.transformer.encoder import Encoder
@@ -50,7 +49,7 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
-        return F.log_softmax(pred)
+        return pred
     
     def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
         if mode == 'greedy':
