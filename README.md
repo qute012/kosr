@@ -52,3 +52,6 @@ Transformer encoder using multi-head attention with relative positional encoding
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
+
+## Athor
+Email: ejrwls012@gmail.com or 406023@naver.com
