@@ -79,12 +79,13 @@ class FileDataset(Dataset):
         
 def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='valid'):
     shuffle = True if mode=='train' else False
-    if mode=='train':
-        dataset = SpeechDataset(trn, root_dir)
-        dataset.data = dataset.data[:10000]
-    else:
-        dataset = SpeechDataset(trn, root_dir)
-        dataset.data = dataset.data[:100]
+    #It is used when debug.
+    #if mode=='train':
+    #    dataset = SpeechDataset(trn, root_dir)
+    #    dataset.data = dataset.data[:1000]
+    #else:
+    #    dataset = SpeechDataset(trn, root_dir)
+    #    dataset.data = dataset.data[:30]
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         

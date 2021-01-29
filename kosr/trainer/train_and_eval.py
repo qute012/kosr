@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+import os
 
 from kosr.utils.metrics import metrics
 from kosr.utils import make_chk, train_log, valid_log, epoch_log
@@ -22,15 +23,15 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
         if best_loss>valid_loss:
             best_loss = valid_loss
             bl_epoch = epoch
-            save(os.path.join(chk_path, 'best_loss.pth'), epoch, model, optimizer, loss)
+            save(os.path.join(chk_path, 'best_loss.pth'), epoch, model, optimizer, train_loss)
             
         if best_wer>valid_wer:
             best_wer = valid_wer
             bw_epoch = epoch
-            save(os.path.join(chk_path, 'best_wer.pth'), epoch, model, optimizer, loss)
+            save(os.path.join(chk_path, 'best_wer.pth'), epoch, model, optimizer, valid_loss)
         
         if epoch_save:
-            save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, loss)
+            save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, valid_loss)
             
         logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss))
             
