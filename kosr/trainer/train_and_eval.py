@@ -71,4 +71,5 @@ def valid(model, optimizer, criterion, dataloader, epoch):
             cer += _cer
             wer += _wer
             step += 1
+            pbar.set_description(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
     logging.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
