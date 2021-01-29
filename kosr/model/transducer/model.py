@@ -50,9 +50,11 @@ class Transducer(nn.Module):
     def forward(self, inputs, input_length, tgt):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
-        enc_out, enc_mask = self.encoder(inputs, input_length)
-        pred = self.decoder(tgt, enc_out, enc_mask)
-        return F.log_softmax(pred)
+        enc_state, enc_mask = self.encoder(inputs, input_length)
+        dec_state = self.decoder(tgt)
+        
+        pred = self.jointer(enc_state, dec_state)
+        return pred
     
     def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
         if mode == 'greedy':
