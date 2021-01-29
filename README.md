@@ -54,4 +54,4 @@ Transformer encoder using multi-head attention with relative positional encoding
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
 
 ## Author
-Email: ejrwls012@gmail.com or 406023@naver.com
+Email: 406023@naver.com
