@@ -9,7 +9,7 @@ def get_now():
 
 def make_chk(root='checkpoint'):
     path = os.path.join(root,get_now())
-    os.makedirs(dirs, exist_ok=True)
+    os.makedirs(path, exist_ok=True)
     
     return path
 

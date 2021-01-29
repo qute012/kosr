@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 from kosr.utils.metrics import metrics
 from kosr.utils import make_chk, train_log, valid_log, epoch_log
-from kosr.trainer import save
+from kosr.trainer.checkpoint import save
 
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
@@ -16,7 +16,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
     bw_epoch = 0
     chk_path = make_chk()
     
-    for epoch in epochs:
+    for epoch in range(epochs):
         train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
         valid_loss, valid_wer = valid(model, optimizer, criterion, valid_dataloader, epoch)
         if best_loss>valid_loss:
@@ -32,7 +32,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
         if epoch_save:
             save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, loss)
             
-        logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss)
+        logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss))
             
             
 

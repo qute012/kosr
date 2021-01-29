@@ -4,7 +4,7 @@ import yaml
 warnings.filterwarnings('ignore')
 
 from kosr.model import Transformer
-from kosr.trainer import train, valid
+from kosr.trainer import train_and_eval
 from kosr.utils.loss import LabelSmoothingLoss
 from kosr.utils.optimizer import get_std_opt
 from kosr.data.dataset import get_dataloader
@@ -23,10 +23,7 @@ def main():
     criterion = LabelSmoothingLoss(len(vocab), padding_idx=conf['model']['pad_id'], smoothing=0.1).cuda()
     optimizer = get_std_opt(model.parameters(), **conf['optimizer'])
     
-    for epoch in range(conf['train']['epochs']):
-        train(model, optimizer, criterion, train_dataloader, epoch)
-        valid(model, optimizer, criterion, valid_dataloader, epoch)
-        save(make_chk(epoch, model_type=conf['setting']['model_type']))
+    train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True)
 
 if __name__ == '__main__':
     main()
