@@ -9,8 +9,6 @@ from kosr.model.mask import make_non_pad_mask
 class EncoderLayer(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate):
         super(EncoderLayer, self).__init__()
-        self.pos_enc = PositionalEncoding(hidden_dim)
-        
         self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         #self.rel_att = RelPositionMultiHeadAttention(hidden_dim, n_head, dropout_rate)
         self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate)
@@ -21,7 +19,6 @@ class EncoderLayer(nn.Module):
 
     def forward(self, x, mask):
         x = self.att_norm(x)
-        pos_enc = self.pos_enc(x)
         #y = self.rel_att(x, x, x, pos_enc, mask)
         y = self.att(x,x,x,mask)
         x = x + y
