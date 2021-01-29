@@ -39,6 +39,9 @@ Before training, you should already get Ai-Hub dataset. And you needs to check c
 python train.py
 ```
 
+# Performance
+Will update.
+
 # Model Architecture
 
 Transformer encoder using multi-head attention with relative positional encoding
