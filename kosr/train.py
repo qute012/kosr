@@ -4,7 +4,8 @@ import yaml
 warnings.filterwarnings('ignore')
 
 from kosr.model import Transformer
-from kosr.trainer import train, valid
+from kosr.trainer import train, valid, save
+from kosr.utils import make_chk
 from kosr.utils.loss import LabelSmoothingLoss
 from kosr.utils.optimizer import get_std_opt
 from kosr.data.dataset import get_dataloader
@@ -21,12 +22,12 @@ def main():
     test_dataloader = get_dataloader('data/Ksponspeech/eval_clean.trn', batch_size=batch_size)
     model = Transformer(out_dim=len(vocab), **conf['model']).cuda()
     criterion = LabelSmoothingLoss(len(vocab), padding_idx=conf['model']['pad_id'], smoothing=0.1).cuda()
-    #criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = get_std_opt(model.parameters(), **conf['optimizer'])
     
     for epoch in range(conf['train']['epochs']):
         train(model, optimizer, criterion, train_dataloader, epoch)
         valid(model, optimizer, criterion, valid_dataloader, epoch)
+        save(make_chk(epoch, model_type=conf['setting']['model_type']))
 
 if __name__ == '__main__':
     main()
