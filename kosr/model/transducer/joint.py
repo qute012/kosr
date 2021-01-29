@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 class JointNet(nn.module):
-    def __init__(self, out_dim, hidden_dim=512, dropout_rate=0.1):
+    def __init__(self, out_dim, in_dim=1024, hidden_dim=512, dropout_rate=0.1):
         super(JointNet, self).__init__()
         self.joint = nn.Linear(hidden_dim, hidden_dim)
         self.act = nn.ReLU()

@@ -44,7 +44,6 @@ class Decoder(nn.Module):
                     for _ in range(n_layers)])
 
         self.last_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
-        self.fc = nn.Linear(hidden_dim, out_dim)
 
     def forward(self, tgt, memory=None, memory_mask=None):
         tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)

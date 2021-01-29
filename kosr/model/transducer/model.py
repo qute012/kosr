@@ -5,8 +5,9 @@ import torch.nn.functional as F
 from kosr.model.feature_extractor import *
 from kosr.model.transducer.encoder import Encoder
 from kosr.model.transducer.decoder import Decoder
+from kosr.model.transducer.joint import JointNet
 
-class Transformer(nn.Module):
+class Transducer(nn.Module):
     def __init__(
         self, 
         out_dim,
@@ -40,9 +41,10 @@ class Transformer(nn.Module):
         self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)
         
-        self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
-                               n_head,dropout_rate, dec_n_layers, pad_id)
+        self.predictor = Decoder(hidden_dim, filter_dim, n_head,
+                                 dropout_rate, dec_n_layers, pad_id)
         
+        self.jointer = JointNet(out_dim, hidden_dim*2, hidden_dim, dropout_rate)
         self.initialize()
 
     def forward(self, inputs, input_length, tgt):
