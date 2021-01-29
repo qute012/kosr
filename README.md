@@ -40,7 +40,7 @@ python train.py
 ```
 after training, create checkpoint directory automatically. You can check saved model at checkpoint directory.
 
-## Performance
+## Results
 Will update.
 
 ## Model Architecture
