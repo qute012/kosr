@@ -11,7 +11,7 @@ def metrics(preds, targets):
     for i, (pred,gold) in enumerate(zip(preds_str,golds_str)):
         if gold=="":
             """only unk token"""
-            length = len(golds[i][1:-1])
+            length = len(targets[i][1:-1])
             cers += cer(pred,gold)/length
             length = 1
             wers += wer(pred,gold)/length

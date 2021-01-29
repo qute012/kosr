@@ -7,7 +7,7 @@ from kosr.utils.metrics import metrics
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} last batch cer: {:.2f}"
+train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} lr: {:.7f}"
 valid_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} wer: {:.2f}"
 
 def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_step=100):
@@ -27,7 +27,9 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             targets = targets.cuda()
         
         preds = model(inputs, input_length, targets)
+
         loss = criterion(preds, targets)
+        #loss = criterion(preds.view(-1,preds.size(-1)), targets.view(-1))
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=max_norm)
         optimizer.step()
@@ -40,9 +42,9 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         cer += _cer
         wer += _wer
         step += 1
-        pbar.set_description(train_log.format('training', epoch, losses/step, cer/step, _cer))
+        pbar.set_description(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
         if step%print_step==0:
-            logging.info(train_log.format('training', epoch, losses/step, cer/step, _cer))
+            logging.info(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
         
 def valid(model, optimizer, criterion, dataloader, epoch):
     losses = 0.
@@ -61,6 +63,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
 
             preds, y_hats = model.recognize(inputs, input_length)
             loss = criterion(preds[:,:targets.size(1),:].contiguous(), targets)
+            #loss = criterion(preds[:,:targets.size(1),:].contiguous().view(-1,preds.size(-1)), targets.view(-1))
 
             losses += loss.item()
 

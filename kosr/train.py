@@ -1,3 +1,4 @@
+import torch.nn as nn
 import warnings
 import yaml
 warnings.filterwarnings('ignore')
@@ -20,6 +21,7 @@ def main():
     test_dataloader = get_dataloader('data/Ksponspeech/eval_clean.trn', batch_size=batch_size)
     model = Transformer(out_dim=len(vocab), **conf['model']).cuda()
     criterion = LabelSmoothingLoss(len(vocab), padding_idx=conf['model']['pad_id'], smoothing=0.1).cuda()
+    #criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = get_std_opt(model.parameters(), **conf['optimizer'])
     
     for epoch in range(conf['train']['epochs']):

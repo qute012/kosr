@@ -1,243 +1,31 @@
-INFO:root:[training] epoch: 0 loss: 251.40 cer: 6.80 last batch cer: 5.13
-INFO:root:[training] epoch: 0 loss: 225.49 cer: 4.25 last batch cer: 0.98
-INFO:root:[training] epoch: 0 loss: 194.24 cer: 3.14 last batch cer: 0.92
-INFO:root:[training] epoch: 0 loss: 169.21 cer: 2.51 last batch cer: 0.50
-INFO:root:[training] epoch: 0 loss: 147.00 cer: 2.08 last batch cer: 0.39
-INFO:root:[training] epoch: 0 loss: 128.94 cer: 1.77 last batch cer: 0.07
-INFO:root:[training] epoch: 0 loss: 113.94 cer: 1.53 last batch cer: 0.12
-INFO:root:[training] epoch: 0 loss: 101.60 cer: 1.35 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 91.49 cer: 1.20 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 83.15 cer: 1.09 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 76.09 cer: 0.99 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 70.13 cer: 0.91 last batch cer: 0.04
-INFO:root:[training] epoch: 0 loss: 65.00 cer: 0.84 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 60.59 cer: 0.78 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 56.74 cer: 0.73 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 53.31 cer: 0.68 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 50.32 cer: 0.64 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 47.65 cer: 0.61 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 45.24 cer: 0.58 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 43.07 cer: 0.55 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 41.11 cer: 0.52 last batch cer: 0.25
-INFO:root:[training] epoch: 0 loss: 39.31 cer: 0.50 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 37.65 cer: 0.48 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 36.14 cer: 0.46 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 34.73 cer: 0.44 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 33.44 cer: 0.42 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 32.25 cer: 0.41 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 31.12 cer: 0.39 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 30.09 cer: 0.38 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 29.12 cer: 0.37 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 28.22 cer: 0.36 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 27.37 cer: 0.34 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 26.56 cer: 0.33 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 25.81 cer: 0.32 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 25.11 cer: 0.32 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 24.44 cer: 0.31 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 23.80 cer: 0.30 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 23.20 cer: 0.29 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 22.63 cer: 0.28 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 22.09 cer: 0.28 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 21.58 cer: 0.27 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 21.08 cer: 0.26 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 20.61 cer: 0.26 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 20.16 cer: 0.25 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 19.74 cer: 0.25 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 19.33 cer: 0.24 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 18.93 cer: 0.24 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 18.56 cer: 0.23 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 18.20 cer: 0.23 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 17.85 cer: 0.22 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 17.52 cer: 0.22 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 17.21 cer: 0.21 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.90 cer: 0.21 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.60 cer: 0.21 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.32 cer: 0.20 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.04 cer: 0.20 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.77 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.51 cer: 0.19 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 15.26 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.02 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.79 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.57 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.34 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.13 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.93 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.73 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.54 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.35 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.17 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.99 cer: 0.16 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 12.82 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.66 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.49 cer: 0.15 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 12.34 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.18 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.03 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.89 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.74 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.61 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.47 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.33 cer: 0.14 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 11.21 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 11.08 cer: 0.13 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 10.96 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.84 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.72 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.61 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.50 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.39 cer: 0.13 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.28 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.18 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 10.08 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.98 cer: 0.12 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 9.88 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.78 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.69 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.59 cer: 0.12 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.50 cer: 0.11 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 9.42 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.33 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.25 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.16 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.08 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 9.00 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.92 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.85 cer: 0.11 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.77 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.70 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.62 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.55 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.48 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.41 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.35 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.28 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.22 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.15 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.09 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 8.03 cer: 0.10 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.97 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.91 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.85 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.79 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.73 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.68 cer: 0.09 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 7.62 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.57 cer: 0.09 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 7.51 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.46 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.41 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.36 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.31 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.26 cer: 0.09 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.21 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.16 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.12 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.07 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 7.02 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.98 cer: 0.08 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 6.93 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.89 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.85 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.80 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.76 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.72 cer: 0.08 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 6.68 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.64 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.59 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.56 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 6.52 cer: 0.08 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 219.50 cer: 5.87 last batch cer: 6.37
-INFO:root:[training] epoch: 0 loss: 208.52 cer: 3.60 last batch cer: 0.99
-INFO:root:[training] epoch: 0 loss: 184.45 cer: 2.70 last batch cer: 0.93
-INFO:root:[training] epoch: 0 loss: 161.98 cer: 2.19 last batch cer: 0.42
-INFO:root:[training] epoch: 0 loss: 222.17 cer: 4.23 last batch cer: 1.54
-INFO:root:[training] epoch: 0 loss: 209.62 cer: 2.78 last batch cer: 0.98
-INFO:root:[training] epoch: 0 loss: 184.48 cer: 2.14 last batch cer: 0.43
-INFO:root:[training] epoch: 0 loss: 162.79 cer: 1.75 last batch cer: 0.37
-INFO:root:[training] epoch: 0 loss: 142.01 cer: 1.47 last batch cer: 0.14
-INFO:root:[training] epoch: 0 loss: 124.39 cer: 1.25 last batch cer: 0.14
-INFO:root:[training] epoch: 0 loss: 110.00 cer: 1.08 last batch cer: 0.05
-INFO:root:[training] epoch: 0 loss: 98.13 cer: 0.95 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 88.48 cer: 0.85 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 80.37 cer: 0.77 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 73.54 cer: 0.70 last batch cer: 0.06
-INFO:root:[training] epoch: 0 loss: 67.82 cer: 0.64 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 62.92 cer: 0.60 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 58.65 cer: 0.55 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 54.93 cer: 0.52 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 51.63 cer: 0.49 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 48.70 cer: 0.46 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 238.06 cer: 6.01 last batch cer: 6.09
-INFO:root:[training] epoch: 0 loss: 215.56 cer: 3.83 last batch cer: 1.02
-INFO:root:[training] epoch: 0 loss: 189.29 cer: 2.86 last batch cer: 0.83
-INFO:root:[training] epoch: 0 loss: 166.40 cer: 2.31 last batch cer: 0.58
-INFO:root:[training] epoch: 0 loss: 145.40 cer: 1.92 last batch cer: 0.43
-INFO:root:[training] epoch: 0 loss: 127.27 cer: 1.63 last batch cer: 0.11
-INFO:root:[training] epoch: 0 loss: 112.79 cer: 1.41 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 100.84 cer: 1.24 last batch cer: 0.08
-INFO:root:[training] epoch: 0 loss: 90.80 cer: 1.11 last batch cer: 0.13
-INFO:root:[training] epoch: 0 loss: 82.41 cer: 1.00 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 75.48 cer: 0.91 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 69.57 cer: 0.83 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 64.53 cer: 0.77 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 60.13 cer: 0.72 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 56.30 cer: 0.67 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 52.92 cer: 0.63 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 49.94 cer: 0.59 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 47.28 cer: 0.56 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 44.88 cer: 0.53 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 42.73 cer: 0.50 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 40.77 cer: 0.48 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 38.97 cer: 0.46 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 37.34 cer: 0.44 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 35.83 cer: 0.42 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 34.44 cer: 0.41 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 33.16 cer: 0.39 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 31.98 cer: 0.38 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 30.88 cer: 0.36 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 29.85 cer: 0.35 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 28.88 cer: 0.34 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 27.99 cer: 0.33 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 27.14 cer: 0.32 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 26.36 cer: 0.31 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 25.61 cer: 0.30 last batch cer: 0.03
-INFO:root:[training] epoch: 0 loss: 24.91 cer: 0.29 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 24.24 cer: 0.28 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 23.61 cer: 0.27 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 23.02 cer: 0.27 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 22.46 cer: 0.26 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 21.92 cer: 0.25 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 21.40 cer: 0.25 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 20.92 cer: 0.24 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 20.46 cer: 0.24 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 20.02 cer: 0.23 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 19.60 cer: 0.23 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 19.19 cer: 0.22 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 18.80 cer: 0.22 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 18.43 cer: 0.21 last batch cer: 0.04
-INFO:root:[training] epoch: 0 loss: 18.07 cer: 0.21 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 17.72 cer: 0.20 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 17.39 cer: 0.20 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 17.08 cer: 0.20 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.77 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.47 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 16.19 cer: 0.19 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.91 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.65 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.40 cer: 0.18 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 15.15 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.91 cer: 0.17 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 14.68 cer: 0.17 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 14.46 cer: 0.17 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 14.24 cer: 0.16 last batch cer: 0.02
-INFO:root:[training] epoch: 0 loss: 14.03 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.83 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.63 cer: 0.16 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.44 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.25 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 13.07 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.89 cer: 0.15 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.72 cer: 0.14 last batch cer: 0.00
-INFO:root:[training] epoch: 0 loss: 12.56 cer: 0.14 last batch cer: 0.01
-INFO:root:[training] epoch: 0 loss: 12.40 cer: 0.14 last batch cer: 0.00
+INFO:root:[training] epoch: 0 loss: 238.98 cer: 5.94 lr: 0.0000175
+INFO:root:[training] epoch: 0 loss: 224.91 cer: 4.65 lr: 0.0000349
+INFO:root:[training] epoch: 0 loss: 219.70 cer: 3.38 lr: 0.0000524
+INFO:root:[training] epoch: 0 loss: 202.83 cer: 2.70 lr: 0.0000699
+INFO:root:[training] epoch: 0 loss: 184.39 cer: 2.40 lr: 0.0000873
+INFO:root:[training] epoch: 0 loss: 166.95 cer: 2.08 lr: 0.0001048
+INFO:root:[training] epoch: 0 loss: 152.73 cer: 1.83 lr: 0.0001223
+INFO:root:[training] epoch: 0 loss: 140.46 cer: 1.65 lr: 0.0001398
+INFO:root:[training] epoch: 0 loss: 130.10 cer: 1.49 lr: 0.0001572
+INFO:root:[training] epoch: 0 loss: 121.57 cer: 1.36 lr: 0.0001747
+INFO:root:[training] epoch: 0 loss: 114.44 cer: 1.26 lr: 0.0001922
+INFO:root:[training] epoch: 0 loss: 108.28 cer: 1.20 lr: 0.0002096
+INFO:root:[training] epoch: 0 loss: 102.49 cer: 1.12 lr: 0.0002271
+INFO:root:[training] epoch: 0 loss: 97.67 cer: 1.06 lr: 0.0002446
+INFO:root:[training] epoch: 0 loss: 93.30 cer: 1.01 lr: 0.0002620
+INFO:root:[training] epoch: 0 loss: 89.53 cer: 0.98 lr: 0.0002795
+INFO:root:[training] epoch: 0 loss: 85.98 cer: 0.95 lr: 0.0002970
+INFO:root:[training] epoch: 0 loss: 82.98 cer: 0.93 lr: 0.0003144
+INFO:root:[training] epoch: 0 loss: 80.27 cer: 0.92 lr: 0.0003319
+INFO:root:[training] epoch: 0 loss: 77.80 cer: 0.90 lr: 0.0003494
+INFO:root:[training] epoch: 0 loss: 75.42 cer: 0.88 lr: 0.0003669
+INFO:root:[training] epoch: 0 loss: 73.36 cer: 0.87 lr: 0.0003843
+INFO:root:[training] epoch: 0 loss: 71.51 cer: 0.85 lr: 0.0004018
+INFO:root:[training] epoch: 0 loss: 69.78 cer: 0.83 lr: 0.0004193
+INFO:root:[training] epoch: 0 loss: 68.21 cer: 0.82 lr: 0.0004367
+INFO:root:[training] epoch: 0 loss: 66.68 cer: 0.80 lr: 0.0004542
+INFO:root:[training] epoch: 0 loss: 65.23 cer: 0.78 lr: 0.0004717
+INFO:root:[training] epoch: 0 loss: 63.81 cer: 0.76 lr: 0.0004891
+INFO:root:[training] epoch: 0 loss: 62.55 cer: 0.74 lr: 0.0005066
+INFO:root:[training] epoch: 0 loss: 61.28 cer: 0.73 lr: 0.0005241
+INFO:root:[training] epoch: 0 loss: 60.15 cer: 0.71 lr: 0.0005415

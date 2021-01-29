@@ -10,11 +10,11 @@ setting:
 
 model:
   feat_extractor: 'vgg'
-  enc_n_layers: 16
-  dec_n_layers: 1 
+  enc_n_layers: 12
+  dec_n_layers: 4 
   hidden_dim: 512 
-  filter_dim: 204
-  n_head: 32
+  filter_dim: 2048
+  n_head: 8
   dropout_rate: 0.1
   max_len: 400
   pad_id: 0
