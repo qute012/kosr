@@ -33,16 +33,17 @@ python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
-# Usage
+## Usage
 Before training, you should already get Ai-Hub dataset. And you needs to check configuration in conf directory and set batch size as fittable as your gpu environment.
 ```
 python train.py
 ```
+after training, create checkpoint directory automatically. You can check saved model at checkpoint directory.
 
-# Performance
+## Performance
 Will update.
 
-# Model Architecture
+## Model Architecture
 
 Transformer encoder using multi-head attention with relative positional encoding
 
