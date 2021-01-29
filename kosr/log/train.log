@@ -727,3 +727,9 @@ INFO:root:[training] epoch: 2 loss: 24.58 cer: 0.74 lr: 0.0001642
 INFO:root:[training] epoch: 2 loss: 24.58 cer: 0.74 lr: 0.0001641
 INFO:root:[training] epoch: 2 loss: 24.59 cer: 0.75 lr: 0.0001640
 INFO:root:[training] epoch: 2 loss: 24.60 cer: 0.75 lr: 0.0001639
+INFO:root:[training] epoch: 2 loss: 24.60 cer: 0.75 lr: 0.0001638
+INFO:root:[training] epoch: 2 loss: 24.60 cer: 0.75 lr: 0.0001637
+INFO:root:[training] epoch: 2 loss: 24.60 cer: 0.75 lr: 0.0001636
+INFO:root:[training] epoch: 2 loss: 24.61 cer: 0.75 lr: 0.0001635
+INFO:root:[training] epoch: 2 loss: 24.60 cer: 0.75 lr: 0.0001633
+INFO:root:[training] epoch: 2 loss: 24.59 cer: 0.75 lr: 0.0001632

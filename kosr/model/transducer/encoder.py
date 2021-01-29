@@ -22,8 +22,7 @@ class EncoderLayer(nn.Module):
     def forward(self, x, mask):
         x = self.att_norm(x)
         pos_enc = self.pos_enc(x)
-        #y = self.rel_att(x, x, x, pos_enc, mask)
-        y = self.att(x,x,x,mask)
+        y = self.rel_att(x, x, x, pos_enc, mask)
         x = x + y
 
         x = self.ffn_norm(x)

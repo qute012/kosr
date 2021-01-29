@@ -2,7 +2,7 @@ import math
 import torch
 import torch.nn as nn
 
-from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
+from kosr.model.attention import MultiHeadAttention
 from kosr.model.transducer.sub_layer import FeedForwardNetwork
 from kosr.model.mask import target_mask
 
@@ -17,7 +17,6 @@ class DecoderLayer(nn.Module):
 
         self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
-        #self.dropout = nn.Dropout(dropout_rate)
 
     def forward(self, x, x_mask, memory, memory_mask):
         y = self.att_norm(x)
