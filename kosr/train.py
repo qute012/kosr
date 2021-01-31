@@ -7,7 +7,7 @@ from kosr.model import build_model
 from kosr.utils import build_conf
 from kosr.trainer import train_and_eval
 from kosr.utils.loss import LabelSmoothingLoss
-from kosr.utils.optimizer import get_std_opt
+from kosr.utils.optimizer import build_optimizer
 from kosr.data.dataset import get_dataloader
 from kosr.utils.convert import vocab
 
@@ -20,7 +20,7 @@ def main():
     test_dataloader = get_dataloader(conf['dataset']['test'], batch_size=batch_size)
     model = build_model(conf)
     criterion = LabelSmoothingLoss(conf['model']['out_dim'], padding_idx=conf['model']['pad_id'], smoothing=0.1).cuda()
-    optimizer = get_std_opt(model.parameters(), **conf['optimizer'])
+    optimizer = build_optimizer(model.parameters(), **conf['optimizer'])
     
     train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True)
 
