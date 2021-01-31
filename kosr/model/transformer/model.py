@@ -32,9 +32,9 @@ class Transformer(nn.Module):
         
         self.feat_extractor = feat_extractor
         if feat_extractor=='vgg':
-            self.conv = VGGExtractor()
+            self.conv = VGGExtractor(hidden_dim=hidden_dim)
         elif feat_extractor=='w2v':
-            self.conv = W2VExtractor()
+            self.conv = W2VExtractor(hidden_dim=hidden_dim)
             
         self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)
@@ -49,6 +49,7 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
         enc_out, enc_mask = self.encoder(inputs, input_length)
         pred = self.decoder(tgt, enc_out, enc_mask)
+        
         return pred
     
     def recognize(self, inputs, input_length, tgt=None, mode='greedy'):

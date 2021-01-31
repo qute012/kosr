@@ -1,10 +1,9 @@
 import math
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
-from kosr.model.transformer.sub_layer import FeedForwardNetwork
+from kosr.model.transformer.sub_layer import PositionalEncoding, FeedForwardNetwork
 from kosr.model.mask import target_mask
 
 class DecoderLayer(nn.Module):
@@ -40,6 +39,7 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.pad_id = pad_id
         self.embed = nn.Embedding(out_dim, hidden_dim)
+        self.pos_enc = PositionalEncoding(hidden_dim)
         self.scale = math.sqrt(hidden_dim)
         self.layers = nn.ModuleList([DecoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
                     for _ in range(n_layers)])
@@ -50,8 +50,8 @@ class Decoder(nn.Module):
     def forward(self, tgt, memory=None, memory_mask=None):
         tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
         
-        decoder_output = self.embed(tgt)*self.scale
+        decoder_output = self.embed(tgt)*self.scale + self.pos_enc(tgt)
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)
         decoder_output = self.fc(self.last_norm(decoder_output))
-        return F.log_softmax(decoder_output)
+        return decoder_output

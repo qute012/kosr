@@ -17,17 +17,17 @@ class SpeechDataset(Dataset):
         self.root_dir = root_dir
         with open(trn, 'r') as f:
             self.data = f.read().strip().split('\n')
-        self.prep_data()
-        
+            
         with open(conf, 'r') as f:
             self.conf = yaml.safe_load(f)
+        self.prep_data(self.conf['model']['max_len'])
             
         self.transforms = Compose([
             MelSpectrogram(**self.conf['feature']['spec']),
             SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
         ])
         
-    def prep_data(self, symbol=' :: '):
+    def prep_data(self, tgt_max_len=None, symbol=' :: '):
         """ 
         Data preparations.
         (A, B): Tuple => A: Audio file path, B: Transcript
@@ -37,6 +37,9 @@ class SpeechDataset(Dataset):
             fname, script = line.split(' :: ')
             fname = os.path.join(self.root_dir, fname)
             script = script.replace('[UNK] ','')
+            if tgt_max_len is not None:
+                if len(script)>tgt_max_len:
+                    continue
             temp.append((fname,script))
         self.data = temp
         
@@ -86,7 +89,7 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     #else:
     #    dataset = SpeechDataset(trn, root_dir)
     #    dataset.data = dataset.data[:30]
-    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+    return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
 def _collate_fn(batch):

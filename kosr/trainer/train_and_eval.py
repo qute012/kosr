@@ -10,10 +10,10 @@ from kosr.trainer.checkpoint import save
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=400, print_step=100, epoch_save=True):
+def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, print_step=100, epoch_save=True):
     best_loss = 10101.0
     bl_epoch = 0
-    best_wer = 101.0
+    best_wer = 10101.0
     bw_epoch = 0
     chk_path = make_chk()
     
@@ -33,6 +33,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
         if epoch_save:
             save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, valid_loss)
             
+        save(os.path.join(chk_path, 'last.pth'), epoch, model, optimizer, valid_loss)
         logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss))
             
             
@@ -73,7 +74,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         if step%print_step==0:
             logging.info(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
             
-    return losses, wer
+    return losses/step, wer/step
         
 def valid(model, optimizer, criterion, dataloader, epoch):
     losses = 0.
@@ -103,4 +104,4 @@ def valid(model, optimizer, criterion, dataloader, epoch):
             pbar.set_description(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
     logging.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
     
-    return losses, wer
+    return losses/step, wer/step

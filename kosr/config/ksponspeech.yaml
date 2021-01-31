@@ -10,20 +10,20 @@ setting:
 
 model:
   feat_extractor: 'vgg'
-  enc_n_layers: 12
-  dec_n_layers: 4 
-  hidden_dim: 512 
+  enc_n_layers: 14
+  dec_n_layers: 6
+  hidden_dim: 256 
   filter_dim: 2048
   n_head: 8
   dropout_rate: 0.1
-  max_len: 400
+  max_len: 150
   pad_id: 0
   sos_id: 1 
   eos_id: 2
 
 optimizer:
-  d_model: 512
-  warmup: 4000
+  d_model: 256
+  warmup: 25000
   factor: 1
 
 train:
