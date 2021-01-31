@@ -1,6 +1,7 @@
 import torch.nn as nn
 import warnings
 import yaml
+import argparse
 warnings.filterwarnings('ignore')
 
 from kosr.model import build_model
@@ -11,8 +12,8 @@ from kosr.utils.optimizer import build_optimizer
 from kosr.data.dataset import get_dataloader
 from kosr.utils.convert import vocab
 
-def main():
-    conf = build_conf('config/ksponspeech.yaml')
+def main(conf_path):
+    conf = build_conf(conf_path)
         
     batch_size = conf['train']['batch_size']
     
@@ -27,4 +28,7 @@ def main():
     train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True)
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')
+    parser.add_argument('--conf', default='config/ksponspeech.yaml', type=str, help="configuration path for training")
+    args = parser.parse_args()
+    main(args.conf)

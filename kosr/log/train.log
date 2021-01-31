@@ -101,3 +101,11 @@ INFO:root:[training] epoch: 0 loss: 17.47 cer: 0.29 lr: 0.0001118
 INFO:root:[training] epoch: 0 loss: 17.30 cer: 0.29 lr: 0.0001129
 INFO:root:[training] epoch: 0 loss: 17.13 cer: 0.29 lr: 0.0001140
 INFO:root:[training] epoch: 0 loss: 16.97 cer: 0.28 lr: 0.0001152
+INFO:root:[training] epoch: 0 loss: 16.81 cer: 0.28 lr: 0.0001163
+INFO:root:[training] epoch: 0 loss: 16.65 cer: 0.28 lr: 0.0001174
+INFO:root:[training] epoch: 0 loss: 16.50 cer: 0.28 lr: 0.0001185
+INFO:root:[training] epoch: 0 loss: 16.35 cer: 0.27 lr: 0.0001196
+INFO:root:[training] epoch: 0 loss: 16.20 cer: 0.27 lr: 0.0001207
+INFO:root:[training] epoch: 0 loss: 16.05 cer: 0.27 lr: 0.0001219
+INFO:root:[training] epoch: 0 loss: 15.91 cer: 0.27 lr: 0.0001230
+INFO:root:[training] epoch: 0 loss: 15.77 cer: 0.26 lr: 0.0001241
