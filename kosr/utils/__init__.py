@@ -1,6 +1,13 @@
 import datetime
 import os
 
+def build_conf(conf_path='config/ksponspeech.yaml'):
+    with open(conf, 'r') as f:
+        conf = yaml.safe_load(f)
+    from kosr.utils.convert import vocab
+    conf['model']['out_dim'] = len(vocab)
+    
+    return conf
 
 def get_now():
     now = datetime.datetime.now()

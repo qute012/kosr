@@ -42,3 +42,14 @@ INFO:root:[training] epoch: 0 loss: 41.99 cer: 0.71 lr: 0.0000458
 INFO:root:[training] epoch: 0 loss: 41.02 cer: 0.69 lr: 0.0000470
 INFO:root:[training] epoch: 0 loss: 40.08 cer: 0.68 lr: 0.0000481
 INFO:root:[training] epoch: 0 loss: 39.19 cer: 0.66 lr: 0.0000492
+INFO:root:[training] epoch: 0 loss: 38.34 cer: 0.65 lr: 0.0000503
+INFO:root:[training] epoch: 0 loss: 37.53 cer: 0.63 lr: 0.0000514
+INFO:root:[training] epoch: 0 loss: 36.74 cer: 0.62 lr: 0.0000525
+INFO:root:[training] epoch: 0 loss: 36.00 cer: 0.61 lr: 0.0000537
+INFO:root:[training] epoch: 0 loss: 35.28 cer: 0.60 lr: 0.0000548
+INFO:root:[training] epoch: 0 loss: 34.58 cer: 0.58 lr: 0.0000559
+INFO:root:[training] epoch: 0 loss: 33.92 cer: 0.57 lr: 0.0000570
+INFO:root:[training] epoch: 0 loss: 33.28 cer: 0.56 lr: 0.0000581
+INFO:root:[training] epoch: 0 loss: 32.66 cer: 0.55 lr: 0.0000593
+INFO:root:[training] epoch: 0 loss: 32.07 cer: 0.54 lr: 0.0000604
+INFO:root:[training] epoch: 0 loss: 31.49 cer: 0.53 lr: 0.0000615
