@@ -8,4 +8,4 @@ def build_model(conf):
     elif model_type=='transducer':
         from kosr.model.transformer.model import Transducer as model
         
-    return model(len(vocab), **conf['model']).to(device)
+    return model(**conf['model']).to(device)

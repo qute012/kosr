@@ -33,6 +33,7 @@ class SpeechDataset(Dataset):
         (A, B): Tuple => A: Audio file path, B: Transcript
         """
         temp = []
+        i=0
         for line in self.data:
             fname, script = line.split(' :: ')
             fname = os.path.join(self.root_dir, fname)
@@ -85,10 +86,10 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     #It is used when debug.
     #if mode=='train':
     #    dataset = SpeechDataset(trn, root_dir)
-    #    dataset.data = dataset.data[:1000]
+    #    dataset.data = dataset.data[:16000]
     #else:
     #    dataset = SpeechDataset(trn, root_dir)
-    #    dataset.data = dataset.data[:30]
+    #    dataset.data = dataset.data[:320]
     return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         

@@ -47,7 +47,7 @@ class LabelSmoothingLoss(nn.Module):
 def build_criterion(conf):
     device = conf['setting']['device']
     loss_type = conf['setting']['loss_type']
-    if loss_type=='label_smoothing'
+    if loss_type=='label_smoothing':
         criterion = LabelSmoothingLoss(conf['model']['out_dim'], padding_idx=conf['model']['pad_id'])
     elif loss_type=='cross_entropy':
         criterion = nn.CrossEntropyLoss(ignore_index=conf['model']['pad_id'])

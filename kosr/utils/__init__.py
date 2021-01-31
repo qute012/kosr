@@ -1,8 +1,9 @@
 import datetime
 import os
+import yaml
 
 def build_conf(conf_path='config/ksponspeech.yaml'):
-    with open(conf, 'r') as f:
+    with open(conf_path, 'r') as f:
         conf = yaml.safe_load(f)
     from kosr.utils.convert import vocab
     conf['model']['out_dim'] = len(vocab)

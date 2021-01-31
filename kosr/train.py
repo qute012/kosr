@@ -12,8 +12,8 @@ from kosr.utils.optimizer import build_optimizer
 from kosr.data.dataset import get_dataloader
 from kosr.utils.convert import vocab
 
-def main(conf_path):
-    conf = build_conf(conf_path)
+def main(args):
+    conf = build_conf(args.conf_path)
         
     batch_size = conf['train']['batch_size']
     
@@ -25,10 +25,13 @@ def main(conf_path):
     criterion = build_criterion(conf)
     optimizer = build_optimizer(model.parameters(), **conf['optimizer'])
     
+    save
+    
     train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')
     parser.add_argument('--conf', default='config/ksponspeech.yaml', type=str, help="configuration path for training")
+    parser.add_argument('--continue_from', default='', type=str, help="continue to train from saved model")
     args = parser.parse_args()
-    main(args.conf)
+    main(args)

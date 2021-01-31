@@ -54,17 +54,17 @@ class Transformer(nn.Module):
     
     def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
         if mode == 'greedy':
-            y_hats = self.greedy_search(inputs, input_length, tgt)
+            preds, y_hats = self.greedy_search(inputs, input_length, tgt)
         elif mode == 'beam':
-            y_hats = self.beam_search(inputs, input_length, tgt)
+            preds, y_hats = self.beam_search(inputs, input_length, tgt)
             
-        return y_hats
+        return preds, y_hats
         
     def greedy_search(self, inputs, input_length, tgt=None):
         btz = inputs.size(0)
         device = inputs.device
         if tgt is None:
-            tgt = torch.zeros(btz,1, dtype=torch.long).to(device)
+            tgt = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
@@ -78,6 +78,13 @@ class Transformer(nn.Module):
             y_hat = pred.max(-1)[1]
             tgt = y_hat
             y_hats[:,step] = y_hat.squeeze(dim=-1)
+        
+        sos_pred = torch.zeros(btz, 1, self.out_dim, dtype=torch.float32).to(device)
+        sos_pred[:,:,self.sos_id] = 1
+        eos_pred = torch.zeros(btz, 1, self.out_dim, dtype=torch.float32).to(device)
+        eos_pred[:,:,self.eos_id] = 1
+        preds = torch.cat((sos_pred, preds, eos_pred), dim=-2)
+        
         return preds, y_hats
         
     def beam_search(self):

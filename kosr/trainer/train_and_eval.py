@@ -55,7 +55,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             targets = targets.cuda()
         
         preds = model(inputs, input_length, targets)
-
+        
         loss = criterion(preds, targets)
         #loss = criterion(preds.view(-1,preds.size(-1)), targets.view(-1))
         loss.backward()
@@ -92,6 +92,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
                 targets = targets.cuda()
 
             preds, y_hats = model.recognize(inputs, input_length)
+            
             loss = criterion(preds[:,:targets.size(1),:].contiguous(), targets)
             #loss = criterion(preds[:,:targets.size(1),:].contiguous().view(-1,preds.size(-1)), targets.view(-1))
 
