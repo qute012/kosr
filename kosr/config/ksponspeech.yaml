@@ -7,8 +7,10 @@ dataset:
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
+  device: 'cuda'
 
 model:
+  out_dim: ???
   feat_extractor: 'vgg'
   enc_n_layers: 14
   dec_n_layers: 6

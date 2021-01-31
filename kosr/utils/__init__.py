@@ -1,6 +1,7 @@
 import datetime
 import os
 
+
 def get_now():
     now = datetime.datetime.now()
     cur = now.strftime('%m-%d-%H:%M')
