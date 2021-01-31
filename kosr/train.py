@@ -6,14 +6,14 @@ warnings.filterwarnings('ignore')
 
 from kosr.model import build_model
 from kosr.utils import build_conf
-from kosr.trainer import train_and_eval
+from kosr.trainer import train_and_eval, load
 from kosr.utils.loss import build_criterion
 from kosr.utils.optimizer import build_optimizer
 from kosr.data.dataset import get_dataloader
 from kosr.utils.convert import vocab
 
 def main(args):
-    conf = build_conf(args.conf_path)
+    conf = build_conf(args.conf)
         
     batch_size = conf['train']['batch_size']
     
@@ -25,9 +25,9 @@ def main(args):
     criterion = build_criterion(conf)
     optimizer = build_optimizer(model.parameters(), **conf['optimizer'])
     
-    save
+    saved_epoch = load(args, model, optimizer)
     
-    train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True)
+    train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True, saved_epoch=saved_epoch)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')

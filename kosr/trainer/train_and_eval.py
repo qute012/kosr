@@ -10,15 +10,20 @@ from kosr.trainer.checkpoint import save
 import logging
 logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
-def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, print_step=100, epoch_save=True):
+def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, saved_epoch=None, print_step=100, epoch_save=True):
     best_loss = 10101.0
     bl_epoch = 0
     best_wer = 10101.0
     bw_epoch = 0
     chk_path = make_chk()
     
-    for epoch in range(epochs):
-        train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
+    if saved_epoch is not None:
+        saved_epoch = saved_epoch + 1
+    else:
+        saved_epoch = 0
+    
+    for epoch in range(saved_epoch, epochs):
+        #train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
         valid_loss, valid_wer = valid(model, optimizer, criterion, valid_dataloader, epoch)
         if best_loss>valid_loss:
             best_loss = valid_loss
