@@ -1,4 +1,4 @@
-import torch.nn as nn
+import torch
 import warnings
 import yaml
 import argparse
@@ -14,7 +14,9 @@ from kosr.utils.convert import vocab
 
 def main(args):
     conf = build_conf(args.conf)
-        
+    
+    torch.cuda.set_device(conf['setting']['device'])
+    
     batch_size = conf['train']['batch_size']
     
     train_dataloader = get_dataloader(conf['dataset']['train'], batch_size=batch_size, mode='train')

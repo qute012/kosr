@@ -26,8 +26,8 @@ model:
 
 optimizer:
   d_model: 512
-  warmup: 25000
-  factor: 1
+  warmup: 4000
+  factor: 0.5
 
 train:
   device: 'cuda'
