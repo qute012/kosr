@@ -12,7 +12,7 @@ model:
   feat_extractor: 'vgg'
   enc_n_layers: 14
   dec_n_layers: 6
-  hidden_dim: 256 
+  hidden_dim: 512 
   filter_dim: 2048
   n_head: 8
   dropout_rate: 0.1
@@ -22,13 +22,13 @@ model:
   eos_id: 2
 
 optimizer:
-  d_model: 256
+  d_model: 512
   warmup: 25000
   factor: 1
 
 train:
   device: 'cuda'
-  batch_size: 4
+  batch_size: 16
   epochs: 50
   save_epoch: 1
   
