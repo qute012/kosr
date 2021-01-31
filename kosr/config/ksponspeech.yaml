@@ -7,6 +7,7 @@ dataset:
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
+  loss_type: 'label_smoothing'
   device: 'cuda'
 
 model:
