@@ -41,7 +41,7 @@ python train.py
 after training, create checkpoint directory automatically. You can check saved model at checkpoint directory.
 
 ## Results
-Will update.
+Will be updated.
 
 ## Model Architecture
 
