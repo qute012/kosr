@@ -25,9 +25,9 @@ def evaluate(model, optimizer, criterion, dataloader):
                 targets = targets.cuda()
 
             preds, y_hats = model.recognize(inputs, input_length)
-            loss = criterion(preds, targets)
+            #loss = criterion(preds, targets)
 
-            losses += loss.item()
+            #losses += loss.item()
 
             _cer, _wer = metrics(y_hats, targets)
             cer += _cer
