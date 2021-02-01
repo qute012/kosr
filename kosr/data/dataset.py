@@ -12,14 +12,14 @@ SOS_TOKEN = '<sos>'
 EOS_TOKEN = '<eos>'
 
 class SpeechDataset(Dataset):
-    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf='config/ksponspeech.yaml'):
+    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None):
         super(SpeechDataset, self).__init__()
         self.root_dir = root_dir
         with open(trn, 'r') as f:
             self.data = f.read().strip().split('\n')
             
-        with open(conf, 'r') as f:
-            self.conf = yaml.safe_load(f)
+        self.conf = conf
+            
         self.prep_data(self.conf['model']['max_len'])
             
         self.transforms = Compose([
@@ -81,7 +81,7 @@ class FileDataset(Dataset):
     def __getitem__(self, idx):
         raise NotImplementedError
         
-def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='valid'):
+def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='valid', conf=None):
     shuffle = True if mode=='train' else False
     #It is used when debug.
     #if mode=='train':
@@ -90,7 +90,7 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     #else:
     #    dataset = SpeechDataset(trn, root_dir)
     #    dataset.data = dataset.data[:320]
-    return DataLoader(SpeechDataset(trn, root_dir), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+    return DataLoader(SpeechDataset(trn, root_dir, conf=conf), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
 def _collate_fn(batch):

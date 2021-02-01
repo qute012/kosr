@@ -1,0 +1,50 @@
+dataset:
+  root: '/root/storage/dataset/kspon'
+  train: 'data/Ksponspeech/train.trn'
+  valid: 'data/Ksponspeech/dev.trn'
+  test: 'data/Ksponspeech/eval_clean.trn'
+
+setting:
+  model_type: 'transducer'
+  opt_type: 'noam'
+  loss_type: 'rnnt_loss'
+  device: 'cuda'
+
+model:
+  out_dim: ???
+  feat_extractor: 'vgg'
+  enc_n_layers: 14
+  dec_n_layers: 6
+  hidden_dim: 512 
+  filter_dim: 2048
+  n_head: 8
+  dropout_rate: 0.1
+  max_len: 150
+  pad_id: 0
+  sos_id: 1 
+  eos_id: 2
+
+optimizer:
+  d_model: 512
+  warmup: 25000
+  factor: 1
+
+train:
+  device: 'cuda'
+  batch_size: 16
+  epochs: 50
+  save_epoch: 1
+  
+feature:
+  spec: 
+    sample_rate: 16000
+    n_mels: 80
+    n_fft: 512
+    hop_length: 256
+    win_length: 512
+    normalized: True
+  augment:
+    spec_augment: 0.5
+    time_shifting: 0
+    noise_injecting: 0
+  

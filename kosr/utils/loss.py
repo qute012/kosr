@@ -48,8 +48,11 @@ def build_criterion(conf):
     device = conf['setting']['device']
     loss_type = conf['setting']['loss_type']
     if loss_type=='label_smoothing':
-        criterion = LabelSmoothingLoss(conf['model']['out_dim'], padding_idx=conf['model']['pad_id'])
+        criterion = LabelSmoothingLoss(conf['model']['out_dim'], padding_idx=conf['model']['pad_id']).to(device)
     elif loss_type=='cross_entropy':
-        criterion = nn.CrossEntropyLoss(ignore_index=conf['model']['pad_id'])
+        criterion = nn.CrossEntropyLoss(ignore_index=conf['model']['pad_id']).to(device)
+    elif loss_type=='rnnt_loss':
+        import warp_rnnt._C as core
+        criterion = rnnt_loss
         
-    return criterion.to(device)
+    return criterion

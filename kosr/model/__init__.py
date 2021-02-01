@@ -6,6 +6,6 @@ def build_model(conf):
     if model_type=='transformer':
         from kosr.model.transformer.model import Transformer as model
     elif model_type=='transducer':
-        from kosr.model.transformer.model import Transducer as model
+        from kosr.model.transducer.model import Transducer as model
         
     return model(**conf['model']).to(device)

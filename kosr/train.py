@@ -17,13 +17,14 @@ def main(args):
     
     batch_size = conf['train']['batch_size']
     
-    train_dataloader = get_dataloader(conf['dataset']['train'], batch_size=batch_size, mode='train')
-    valid_dataloader = get_dataloader(conf['dataset']['valid'], batch_size=batch_size)
-    test_dataloader = get_dataloader(conf['dataset']['test'], batch_size=batch_size)
+    train_dataloader = get_dataloader(conf['dataset']['train'], batch_size=batch_size, mode='train', conf=conf)
+    valid_dataloader = get_dataloader(conf['dataset']['valid'], batch_size=batch_size, conf=conf)
+    test_dataloader = get_dataloader(conf['dataset']['test'], batch_size=batch_size, conf=conf)
     
     model = build_model(conf)
     criterion = build_criterion(conf)
     optimizer = build_optimizer(model.parameters(), **conf['optimizer'])
+    print('success build model')
     
     saved_epoch = load(args, model, optimizer)
     
@@ -31,7 +32,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')
-    parser.add_argument('--conf', default='config/ksponspeech.yaml', type=str, help="configuration path for training")
+    parser.add_argument('--conf', default='config/ksponspeech_transformer_base.yaml', type=str, help="configuration path for training")
     parser.add_argument('--continue_from', default='', type=str, help="continue to train from saved model")
     args = parser.parse_args()
     main(args)
