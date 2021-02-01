@@ -12,7 +12,7 @@ class Compose(object):
         return data
 
 class MelSpectrogram(object):
-    def __init__(self, sample_rate=16000, n_fft=512, win_length=512, hop_length=256, n_mels=80, normalized=True):
+    def __init__(self, sample_rate=16000, n_fft=512, win_length=512, hop_length=256, n_mels=80, normalized=False):
         self.sample_rate = sample_rate
         self.n_fft = n_fft
         self.win_length = win_length

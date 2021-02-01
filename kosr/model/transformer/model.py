@@ -45,26 +45,39 @@ class Transformer(nn.Module):
         self.initialize()
 
     def forward(self, inputs, input_length, tgt):
+        btz = tgt.size(0)
+        
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
         enc_out, enc_mask = self.encoder(inputs, input_length)
-        pred = self.decoder(tgt, enc_out, enc_mask)
         
-        return pred
+        preds = self.decoder(tgt[tgt!=self.eos_id].view(btz,-1), enc_out, enc_mask)
+        golds = tgt[tgt!=self.sos_id].view(btz,-1)
+        
+        return preds, golds
     
     def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
         if mode == 'greedy':
-            preds, y_hats = self.greedy_search(inputs, input_length, tgt)
+            preds, golds, y_hats = self.greedy_search(inputs, input_length, tgt)
         elif mode == 'beam':
-            preds, y_hats = self.beam_search(inputs, input_length, tgt)
-            
-        return preds, y_hats
+            preds, golds, y_hats = self.beam_search(inputs, input_length, tgt)
+        
+        if golds is None:
+            return preds, y_hats
+        else:
+            return preds, golds, y_hats
         
     def greedy_search(self, inputs, input_length, tgt=None):
         btz = inputs.size(0)
         device = inputs.device
         if tgt is None:
+            """for testing"""
+            golds = None
             tgt = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
+        else:
+            """for validation"""
+            golds = tgt[tgt!=self.sos_id].view(btz,-1)
+            tgt = tgt[:,:1]
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
@@ -78,14 +91,8 @@ class Transformer(nn.Module):
             y_hat = pred.max(-1)[1]
             tgt = y_hat
             y_hats[:,step] = y_hat.squeeze(dim=-1)
-        
-        sos_pred = torch.zeros(btz, 1, self.out_dim, dtype=torch.float32).to(device)
-        sos_pred[:,:,self.sos_id] = 1
-        eos_pred = torch.zeros(btz, 1, self.out_dim, dtype=torch.float32).to(device)
-        eos_pred[:,:,self.eos_id] = 1
-        preds = torch.cat((sos_pred, preds, eos_pred), dim=-2)
-        
-        return preds, y_hats
+
+        return preds, golds, y_hats
         
     def beam_search(self):
         raise NotImplementedError
