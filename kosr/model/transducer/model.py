@@ -24,7 +24,7 @@ class Transducer(nn.Module):
         eos_id=2,
         init_type="xavier_uniform"
     ):
-        super(Transformer, self).__init__()
+        super(Transducer, self).__init__()
         self.max_len = max_len
         self.out_dim = out_dim
         self.pad_id = pad_id
@@ -41,8 +41,8 @@ class Transducer(nn.Module):
         self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)
         
-        self.predictor = Decoder(hidden_dim, filter_dim, n_head,
-                                 dropout_rate, dec_n_layers, pad_id)
+        self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
+                               n_head, dropout_rate, dec_n_layers, pad_id)
         
         self.jointer = JointNet(out_dim, hidden_dim*2, hidden_dim, dropout_rate)
         self.initialize()
