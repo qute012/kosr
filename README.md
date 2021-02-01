@@ -3,6 +3,19 @@
 Implement [Transformer Transducer]. This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
 KsponSpeech dataset was processed by referring to [here].
 
+## Preparation
+You can download dataset at [AI-Hub]. And the structure of the directory should be prepared for getting started as shown below.
+```
+root directory
+ㄴKsponSpeech_01
+ㄴKsponSpeech_02
+ㄴKsponSpeech_03
+ㄴKsponSpeech_04
+ㄴKsponSpeech_05
+ㄴKsponSpeech_eval
+ㄴscripts
+```
+
 ## Environment
 
 Warp-transducer needs to install gcc++5 and export CUDA environment variable.
@@ -52,6 +65,7 @@ Transformer encoder using multi-head attention with relative positional encoding
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
+[AI-Hub]: https://www.aihub.or.kr/aidata/105
 
 ## Author
 Email: 406023@naver.com
