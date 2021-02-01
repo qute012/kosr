@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 from kosr.model.attention import MultiHeadAttention
-from kosr.model.transducer.sub_layer import FeedForwardNetwork
+from kosr.model.transducer.sub_layer import PositionalEncoding, FeedForwardNetwork
 from kosr.model.mask import target_mask
 
 class DecoderLayer(nn.Module):
@@ -29,7 +29,7 @@ class DecoderLayer(nn.Module):
         return x
 
 class Decoder(nn.Module):
-    def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate, n_layers, pad_id):
+    def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers, pad_id):
         super(Decoder, self).__init__()
         self.pad_id = pad_id
         self.embed = nn.Embedding(out_dim, hidden_dim)
