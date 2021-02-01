@@ -6,7 +6,7 @@ KsponSpeech dataset was processed by referring to [here].
 ## Preparation
 You can download dataset at [AI-Hub]. And the structure of the directory should be prepared for getting started as shown below.
 ```
-root directory
+root
 └─ KsponSpeech_01
 └─ KsponSpeech_02
 └─ KsponSpeech_03
