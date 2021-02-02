@@ -1,6 +1,5 @@
 import Levenshtein as Lev
-from kosr.data.dataset import PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
-from kosr.utils.convert import char2id, id2char
+from kosr.utils.convert import char2id, id2char, PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
 
 def metrics(preds, targets):
     btz = targets.size(0)
@@ -57,7 +56,7 @@ def cer(s1, s2):
 def seq_to_str(seqs, id2char):
     #assert len(seqs.shape)<=2, 'can not convert 3-dimensional sequence to string'
     pad_id = id2char.index(PAD_TOKEN)
-    unk_id = id2char.index(UNK_TOKEN)
+    unk_id = id2char.index(UNK_TOKEN) if UNK_TOKEN in id2char else None 
     sos_id = id2char.index(SOS_TOKEN)
     eos_id = id2char.index(EOS_TOKEN)
     

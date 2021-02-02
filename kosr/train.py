@@ -24,7 +24,6 @@ def main(args):
     model = build_model(conf)
     criterion = build_criterion(conf)
     optimizer = build_optimizer(model.parameters(), **conf['optimizer'])
-    print('success build model')
     
     saved_epoch = load(args, model, optimizer)
     

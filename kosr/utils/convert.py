@@ -1,5 +1,10 @@
 import json
 
+PAD_TOKEN = '<pad>'
+UNK_TOKEN = None
+SOS_TOKEN = '<sos>'
+EOS_TOKEN = '<eos>'
+
 with open('data/Ksponspeech/kspon_labels.json', 'r') as f:
         vocab = json.load(f)
         

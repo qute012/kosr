@@ -13,7 +13,7 @@ setting:
 model:
   out_dim: ???
   feat_extractor: 'vgg'
-  enc_n_layers: 14
+  enc_n_layers: 12
   dec_n_layers: 6
   hidden_dim: 512 
   filter_dim: 2048
@@ -26,7 +26,7 @@ model:
 
 optimizer:
   d_model: 512
-  warmup: 25000
+  warmup: 4000
   factor: 1
 
 train:
@@ -38,11 +38,12 @@ train:
 feature:
   spec: 
     sample_rate: 16000
-    n_mels: 80
-    n_fft: 512
-    hop_length: 256
-    win_length: 512
-    normalized: True
+    #n_mels: 80
+    #n_fft: 512
+    #hop_length: 256
+    win_length: 0.02
+    win_stride: 0.01
+    normalized: False
   augment:
     spec_augment: 0.5
     time_shifting: 0

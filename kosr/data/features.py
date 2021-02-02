@@ -1,5 +1,6 @@
 import torch
 import torchaudio
+import librosa
 import random
 
 class Compose(object):
@@ -20,7 +21,7 @@ class MelSpectrogram(object):
         self.n_mels = n_mels
         self.normalized = normalized
         
-        self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
         self.transform = torchaudio.transforms.MelSpectrogram(
             sample_rate=sample_rate,
             n_fft=self.n_fft,
@@ -36,11 +37,38 @@ class MelSpectrogram(object):
 
     def __call__(self, signal):
         mel = self.transform(signal)
-        mel = self.amplitude_to_db(mel)
+        #mel = self.amplitude_to_db(mel)
         if self.normalized:
             mel = self.norm(mel)
         return mel
 
+class Spectrogram(object):
+    def __init__(self, sample_rate=16000, win_length=0.02, win_stride=0.01, normalized=False):
+        self.sample_rate = sample_rate
+        self.win_length = win_length
+        self.hop_length = int(self.sample_rate * win_stride)
+        self.n_fft = int(self.sample_rate * win_length)
+        self.normalized = normalized
+        
+        #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        self.transform = torchaudio.transforms.Spectrogram(
+            n_fft = self.n_fft,
+            win_length = self.win_length,
+            hop_length=self.hop_length,
+        )
+        
+    def norm(self, spec, eps=1e-5):
+        m = torch.mean(spec, axis=1, keepdims=True)
+        s = torch.std(spec, axis=1, keepdims=True) + eps
+        return (spec-m)/s
+
+    def __call__(self, signal):
+        spec = self.transform(signal)
+        #mel = self.amplitude_to_db(mel)
+        if self.normalized:
+            spec = self.norm(mel)
+        return spec
+    
 class SpecAugment(object):
     def __init__(self, frequency_mask_max_percentage=0.3, time_mask_max_percentage=0.1, prob=0.5):
         self.frequency_mask_probability = frequency_mask_max_percentage

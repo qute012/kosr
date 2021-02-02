@@ -17,6 +17,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
     bw_epoch = 0
     chk_path = make_chk()
     
+    logging.info("checkpoint saves in {} directory".format(chk_path))
     if saved_epoch is not None:
         saved_epoch = saved_epoch + 1
     else:

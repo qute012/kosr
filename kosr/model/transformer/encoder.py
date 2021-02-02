@@ -11,23 +11,23 @@ class EncoderLayer(nn.Module):
         super(EncoderLayer, self).__init__()
         self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         #self.rel_att = RelPositionMultiHeadAttention(hidden_dim, n_head, dropout_rate)
-        self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate)
+        self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate=0.0)
 
         self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
         self.dropout = nn.Dropout(dropout_rate)
 
     def forward(self, x, mask):
-        x = self.att_norm(x)
+        y = self.att_norm(x)
         #y = self.rel_att(x, x, x, pos_enc, mask)
-        y = self.att(x,x,x,mask)
-        x = x + y
+        y = self.att(y,y,y,mask)
+        x = x + self.dropout(y)
 
-        x = self.ffn_norm(x)
+        y = self.ffn_norm(x)
         y = self.ffn(y)
-        x = x + y
-        x = self.dropout(x)
-        return x, mask
+        y = x + self.dropout(y)
+        #x = self.dropout(x)
+        return y, mask
     
 class Encoder(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate, n_layers):
@@ -37,6 +37,7 @@ class Encoder(nn.Module):
         self.dropout = nn.Dropout(dropout_rate)
         self.layers = nn.ModuleList([EncoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
                     for _ in range(n_layers)])
+        self.norm = nn.LayerNorm(hidden_dim, eps=1e-6)
 
     def forward(self, inputs, input_length):
         mask = make_non_pad_mask(input_length).to(inputs.device).unsqueeze(-2)
@@ -44,4 +45,5 @@ class Encoder(nn.Module):
         encoder_output = self.dropout(inputs*self.scale + self.pos_enc(inputs))
         for enc_layer in self.layers:
             encoder_output, mask = enc_layer(encoder_output, mask)
+        encoder_output = self.norm(encoder_output)
         return encoder_output, mask

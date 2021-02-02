@@ -42,7 +42,7 @@ feature:
     n_fft: 512
     hop_length: 256
     win_length: 512
-    normalized: True
+    normalized: False
   augment:
     spec_augment: 0.5
     time_shifting: 0

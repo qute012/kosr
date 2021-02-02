@@ -10,19 +10,19 @@ class DecoderLayer(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate):
         super(DecoderLayer, self).__init__()
         self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
-        self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate)
+        self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate=0.0)
 
         self.memory_att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
-        self.memory_att = MultiHeadAttention(hidden_dim, n_head, dropout_rate)
+        self.memory_att = MultiHeadAttention(hidden_dim, n_head, dropout_rate=0.0)
 
         self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
-        #self.dropout = nn.Dropout(dropout_rate)
+        self.dropout = nn.Dropout(dropout_rate)
 
     def forward(self, x, x_mask, memory, memory_mask):
         y = self.att_norm(x)
         y = self.att(y, y, y, x_mask)
-        x = x + y
+        x = x + self.dropout(y)
 
         if memory is not None:
             y = self.memory_att_norm(x)
@@ -31,8 +31,8 @@ class DecoderLayer(nn.Module):
 
         y = self.ffn_norm(x)
         y = self.ffn(y)
-        x = x + y
-        return x
+        y = x + self.dropout(y)
+        return y
 
 class Decoder(nn.Module):
     def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers, pad_id):
@@ -50,7 +50,7 @@ class Decoder(nn.Module):
 
     def forward(self, tgt, memory=None, memory_mask=None):
         tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
-        
+
         decoder_output = self.dropout(self.embed(tgt)*self.scale + self.pos_enc(tgt))
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)

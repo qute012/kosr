@@ -4,16 +4,68 @@ from torch.utils.data import Dataset, DataLoader
 
 from kosr.data.features import *
 from kosr.data.audio import *
-from kosr.utils.convert import char2id, id2char
+from kosr.utils.convert import char2id, id2char, PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
 
-PAD_TOKEN = '<pad>'
-UNK_TOKEN = '<unk>'
-SOS_TOKEN = '<sos>'
-EOS_TOKEN = '<eos>'
-
-class SpeechDataset(Dataset):
+class SpectrogramDataset(Dataset):
     def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None):
-        super(SpeechDataset, self).__init__()
+        super(SpectrogramDataset, self).__init__()
+        self.root_dir = root_dir
+        with open(trn, 'r') as f:
+            self.data = f.read().strip().split('\n')
+            
+        self.conf = conf
+            
+        self.prep_data(self.conf['model']['max_len'])
+            
+        self.transforms = Compose([
+            Spectrogram(**self.conf['feature']['spec']),
+            SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
+        ])
+        
+    def prep_data(self, tgt_max_len=None, symbol=' :: '):
+        """ 
+        Data preparations.
+        (A, B): Tuple => A: Audio file path, B: Transcript
+        """
+        temp = []
+        i=0
+        for line in self.data:
+            fname, script = line.split(' :: ')
+            fname = os.path.join(self.root_dir, fname)
+            script = script.replace('[UNK] ','')
+            if tgt_max_len is not None:
+                if len(script)>tgt_max_len:
+                    continue
+            temp.append((fname,script))
+        self.data = temp
+        
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, index):
+        fname, script = self.data[index]
+        sig, sr = load_audio(fname)
+        spec = self.transforms(sig).transpose(1,0)
+        seq = self.scr_to_seq(script)
+        return spec, seq
+        
+    def scr_to_seq(self, scr):
+        seq = list()
+        seq.append(char2id.get(SOS_TOKEN))
+        for c in scr:
+            if c in id2char:
+                seq.append(char2id.get(c))
+            else:
+                if UNK_TOKEN is not None:
+                    seq.append(char2id.get(UNK_TOKEN))
+                else:
+                    continue
+        seq.append(char2id.get(EOS_TOKEN))
+        return seq
+
+class MelSpectrogramDataset(Dataset):
+    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None):
+        super(MelSpectrogram, self).__init__()
         self.root_dir = root_dir
         with open(trn, 'r') as f:
             self.data = f.read().strip().split('\n')
@@ -67,8 +119,6 @@ class SpeechDataset(Dataset):
                     continue
         seq.append(char2id.get(EOS_TOKEN))
         return seq
-        
-
 
 class FileDataset(Dataset):
     def __init__(self, root='Ksponspeech/features'):
@@ -85,12 +135,13 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     shuffle = True if mode=='train' else False
     #It is used when debug.
     #if mode=='train':
-    #    dataset = SpeechDataset(trn, root_dir)
+    #    dataset = SpeechDataset(trn, root_dir, conf=conf)
     #    dataset.data = dataset.data[:16000]
     #else:
-    #    dataset = SpeechDataset(trn, root_dir)
+    #    dataset = SpeechDataset(trn, root_dir, conf=conf)
     #    dataset.data = dataset.data[:320]
-    return DataLoader(SpeechDataset(trn, root_dir, conf=conf), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+    #SpeechDataset(trn, root_dir, conf=conf)
+    return DataLoader(SpectrogramDataset(trn, root_dir, conf=conf), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
 def _collate_fn(batch):
