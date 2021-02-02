@@ -9,6 +9,7 @@ class Transformer(nn.Module):
     def __init__(
         self, 
         out_dim,
+        in_dim=80,
         feat_extractor='vgg', 
         enc_n_layers=14, 
         dec_n_layers=6, 
@@ -32,9 +33,9 @@ class Transformer(nn.Module):
         
         self.feat_extractor = feat_extractor
         if feat_extractor=='vgg':
-            self.conv = VGGExtractor(hidden_dim=hidden_dim)
+            self.conv = VGGExtractor(in_dim=in_dim, hidden_dim=hidden_dim)
         elif feat_extractor=='w2v':
-            self.conv = W2VExtractor(hidden_dim=hidden_dim)
+            self.conv = W2VExtractor(in_dim=in_dim, hidden_dim=hidden_dim)
             
         self.encoder = Encoder(hidden_dim, filter_dim, n_head,
                                dropout_rate, enc_n_layers)

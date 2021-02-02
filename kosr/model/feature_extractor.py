@@ -24,6 +24,7 @@ class VGGExtractor(nn.Module):
         x = x.unsqueeze(1)
         x = self.conv(x)
         B,C,T,F = x.size()
+        print(x.shape)
         x = self.post_extract_proj(x.transpose(1,2).contiguous().view(B,T,C*F))
         x = self.dropout(x)
         return x

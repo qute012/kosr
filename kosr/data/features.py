@@ -45,9 +45,9 @@ class MelSpectrogram(object):
 class Spectrogram(object):
     def __init__(self, sample_rate=16000, win_length=0.02, win_stride=0.01, normalized=False):
         self.sample_rate = sample_rate
-        self.win_length = win_length
         self.hop_length = int(self.sample_rate * win_stride)
         self.n_fft = int(self.sample_rate * win_length)
+        self.win_length = self.n_fft
         self.normalized = normalized
         
         #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
@@ -64,6 +64,7 @@ class Spectrogram(object):
 
     def __call__(self, signal):
         spec = self.transform(signal)
+        spec = torch.log1p(spec)
         #mel = self.amplitude_to_db(mel)
         if self.normalized:
             spec = self.norm(mel)

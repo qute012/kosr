@@ -12,6 +12,7 @@ setting:
 
 model:
   out_dim: ???
+  in_dim: 80
   feat_extractor: 'vgg'
   enc_n_layers: 12
   dec_n_layers: 6
