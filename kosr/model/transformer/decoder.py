@@ -35,9 +35,8 @@ class DecoderLayer(nn.Module):
         return y
 
 class Decoder(nn.Module):
-    def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers, pad_id):
+    def __init__(self, out_dim, hidden_dim, filter_dim, n_head, dropout_rate, n_layers):
         super(Decoder, self).__init__()
-        self.pad_id = pad_id
         self.embed = nn.Embedding(out_dim, hidden_dim)
         self.pos_enc = PositionalEncoding(hidden_dim)
         self.scale = math.sqrt(hidden_dim)
@@ -48,8 +47,7 @@ class Decoder(nn.Module):
         self.last_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.fc = nn.Linear(hidden_dim, out_dim)
 
-    def forward(self, tgt, memory=None, memory_mask=None):
-        tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
+    def forward(self, tgt, tgt_mask=None, memory=None, memory_mask=None):
         #tgt_mask = None
         decoder_output = self.dropout(self.embed(tgt)*self.scale + self.pos_enc(tgt))
         for i, dec_layer in enumerate(self.layers):

@@ -59,7 +59,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         if torch.cuda.is_available():
             inputs = inputs.cuda()
             targets = targets.cuda()
-        
+
         preds, targets = model(inputs, input_length, targets)
         
         loss = criterion(preds, targets)
@@ -71,6 +71,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         losses += loss.item()
         
         y_hats = preds.max(-1)[1]
+        #print(y_hats[0], targets[0])
 
         _cer, _wer = metrics(y_hats, targets)
         cer += _cer
@@ -96,7 +97,7 @@ def valid(model, optimizer, criterion, dataloader, epoch):
             if torch.cuda.is_available():
                 inputs = inputs.cuda()
                 targets = targets.cuda()
-
+            
             preds, targets, y_hats = model.recognize(inputs, input_length, targets)
             
             loss = criterion(preds, targets)

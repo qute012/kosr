@@ -22,6 +22,7 @@ class MelSpectrogram(object):
         self.normalized = normalized
         
         #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        """
         self.transform = torchaudio.transforms.MelSpectrogram(
             sample_rate=sample_rate,
             n_fft=self.n_fft,
@@ -29,6 +30,9 @@ class MelSpectrogram(object):
             hop_length=self.hop_length,
             n_mels=n_mels,
         )
+        """
+        
+        self.transform = librosa.feature.melspectrogram
         
     def norm(self, spec, eps=1e-5):
         m = torch.mean(spec, axis=1, keepdims=True)
@@ -36,7 +40,16 @@ class MelSpectrogram(object):
         return (spec-m)/s
 
     def __call__(self, signal):
+        mel = self.transform(
+            signal, 
+            sr=self.sample_rate, 
+            n_fft=self.n_fft, 
+            hop_length=self.hop_length,
+            n_mels=self.n_mels
+        )
+        """
         mel = self.transform(signal)
+        """
         #mel = self.amplitude_to_db(mel)
         if self.normalized:
             mel = self.norm(mel)

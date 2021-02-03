@@ -4,6 +4,7 @@ import torch.nn as nn
 from kosr.model.feature_extractor import *
 from kosr.model.transformer.encoder import Encoder
 from kosr.model.transformer.decoder import Decoder
+from kosr.model.mask import target_mask, subsequent_mask, get_attn_pad_mask
 
 class Transformer(nn.Module):
     def __init__(
@@ -41,18 +42,20 @@ class Transformer(nn.Module):
                                dropout_rate, enc_n_layers)
         
         self.decoder = Decoder(out_dim, hidden_dim, filter_dim, 
-                               n_head,dropout_rate, dec_n_layers, pad_id)
+                               n_head,dropout_rate, dec_n_layers)
         
         self.initialize()
 
     def forward(self, inputs, input_length, tgt):
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
-        enc_out, enc_mask = self.encoder(inputs, input_length)
+            
+        enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
+        enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
         tgt_in, golds = self.make_in_out(tgt)
-
-        preds = self.decoder(tgt_in, enc_out, enc_mask)
+        tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
+        preds = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
         
         return preds, golds
     
@@ -73,20 +76,26 @@ class Transformer(nn.Module):
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
-
-        enc_out, enc_mask = self.encoder(inputs, input_length)
         
+        enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
+        enc_out, enc_mask = self.encoder(inputs, enc_mask)
+
         preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
-        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
+        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).fill_(self.sos_id).to(device)
         
         tgt_in = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
         for step in range(self.max_len):
-            pred = self.decoder(tgt_in, enc_out, enc_mask)
-            preds[:,step,:] = pred.squeeze(-2)
-            y_hat = pred.max(-1)[1]
-            tgt_in = y_hat
-            y_hats[:,step] = y_hat.squeeze(dim=-1)
-        
+            #tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
+            tgt_mask = subsequent_mask(step+1).to(tgt.device).unsqueeze(0)
+            preds = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+            #preds[:,step,:] = pred.squeeze(-2)
+            y_hat = preds.max(-1)[1]
+            #print(y_hat)
+            #print(y_hat)
+            tgt_in = torch.cat((tgt_in,y_hat[:,step].unsqueeze(1)), dim=1)
+            #y_hats[:,step] = y_hat.squeeze(dim=-1)
+            #y_hats[:,step] = y_hat[:,step]
+        y_hats = tgt_in[:,1:]
         if tgt is None:
             """for testing"""
             golds = None
@@ -127,10 +136,10 @@ class Transformer(nn.Module):
     def make_in_out(self, tgt):
         btz = tgt.size(0)
         
-        tgt_in = torch.clone(tgt)
-        tgt_in[tgt_in==self.pad_id] = self.eos_id
-        tgt_in = tgt_in.view(btz,-1)[:, :-1]
-
+        #tgt_in = torch.clone(tgt)
+        #tgt_in[tgt_in==self.pad_id] = self.eos_id
+        #tgt_in = tgt_in.view(btz,-1)[:, :-1]
+        tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
         tgt_out = tgt[tgt!=self.sos_id].view(btz,-1)
         
         return tgt_in, tgt_out

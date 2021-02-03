@@ -39,8 +39,7 @@ class Encoder(nn.Module):
                     for _ in range(n_layers)])
         self.norm = nn.LayerNorm(hidden_dim, eps=1e-6)
 
-    def forward(self, inputs, input_length):
-        mask = make_non_pad_mask(input_length).to(inputs.device).unsqueeze(-2)
+    def forward(self, inputs, mask=None):
         #mask = None
         encoder_output = self.dropout(inputs*self.scale + self.pos_enc(inputs))
         for enc_layer in self.layers:

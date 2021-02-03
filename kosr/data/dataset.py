@@ -102,7 +102,7 @@ class MelSpectrogramDataset(Dataset):
     def __getitem__(self, index):
         fname, script = self.data[index]
         sig, sr = load_audio(fname)
-        spec = self.transforms(sig).transpose(1,0)
+        spec = torch.FloatTensor(self.transforms(sig)).transpose(1,0)
         seq = self.scr_to_seq(script)
         return spec, seq
         
@@ -151,7 +151,6 @@ def _collate_fn(batch):
 
     def target_length_(p):
         return len(p[1])
-
     batch = sorted(batch, key=lambda sample: sample[0].size(0), reverse=True)
 
     seq_lengths = [len(s[0]) for s in batch]
