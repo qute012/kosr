@@ -39,11 +39,12 @@ train:
 feature:
   spec: 
     sample_rate: 16000
-    #n_mels: 80
-    #n_fft: 512
-    #hop_length: 256
-    win_length: 0.02
-    win_stride: 0.01
+    n_mels: 80
+    n_fft: 512
+    hop_length: 256
+    win_length: 512
+    #win_length: 0.02
+    #win_stride: 0.01
     normalized: False
   augment:
     spec_augment: 0.5

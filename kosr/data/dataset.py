@@ -65,7 +65,7 @@ class SpectrogramDataset(Dataset):
 
 class MelSpectrogramDataset(Dataset):
     def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None):
-        super(MelSpectrogram, self).__init__()
+        super(MelSpectrogramDataset, self).__init__()
         self.root_dir = root_dir
         with open(trn, 'r') as f:
             self.data = f.read().strip().split('\n')
@@ -76,7 +76,7 @@ class MelSpectrogramDataset(Dataset):
             
         self.transforms = Compose([
             MelSpectrogram(**self.conf['feature']['spec']),
-            SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
+            #SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
         ])
         
     def prep_data(self, tgt_max_len=None, symbol=' :: '):
@@ -141,7 +141,7 @@ def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, m
     #    dataset = SpeechDataset(trn, root_dir, conf=conf)
     #    dataset.data = dataset.data[:320]
     #SpeechDataset(trn, root_dir, conf=conf)
-    return DataLoader(SpectrogramDataset(trn, root_dir, conf=conf), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
+    return DataLoader(MelSpectrogramDataset(trn, root_dir, conf=conf), batch_size=batch_size, shuffle=shuffle, pin_memory=True,
                               collate_fn=_collate_fn, num_workers=8)
         
 def _collate_fn(batch):

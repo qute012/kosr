@@ -50,7 +50,7 @@ class Decoder(nn.Module):
 
     def forward(self, tgt, memory=None, memory_mask=None):
         tgt_mask = target_mask(tgt, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
-
+        #tgt_mask = None
         decoder_output = self.dropout(self.embed(tgt)*self.scale + self.pos_enc(tgt))
         for i, dec_layer in enumerate(self.layers):
             decoder_output = dec_layer(decoder_output, tgt_mask, memory, memory_mask)

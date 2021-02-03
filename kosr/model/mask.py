@@ -40,7 +40,7 @@ def subsequent_mask(size, device="cpu", dtype=torch.bool):
 def target_mask(ys_in_pad, ignore_id):
     ys_mask = ys_in_pad != ignore_id
     m = subsequent_mask(ys_mask.size(-1), device=ys_mask.device).unsqueeze(0)
-    return (ys_mask.unsqueeze(-2) & m).eq(0)
+    return ys_mask.unsqueeze(-2) & m
 
 def compute_mask(mask):
     """Create a subsampled version of x_mask.

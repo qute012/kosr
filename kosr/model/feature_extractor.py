@@ -18,15 +18,14 @@ class VGGExtractor(nn.Module):
         )
         sub_sampling_dim = in_dim>>2
         self.post_extract_proj = nn.Linear(sub_sampling_dim*feature_dim, hidden_dim)
-        self.dropout = nn.Dropout(p=proj_dropout_rate)
+        #self.dropout = nn.Dropout(p=proj_dropout_rate)
         
     def forward(self, x):
         x = x.unsqueeze(1)
         x = self.conv(x)
         B,C,T,F = x.size()
-        print(x.shape)
         x = self.post_extract_proj(x.transpose(1,2).contiguous().view(B,T,C*F))
-        x = self.dropout(x)
+        #x = self.dropout(x)
         return x
         
 class W2VExtractor(nn.Module):
