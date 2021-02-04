@@ -8,7 +8,6 @@ from kosr.utils import make_chk, train_log, valid_log, epoch_log
 from kosr.trainer.checkpoint import save
 
 import logging
-logging.basicConfig(filename='log/train.log',level=logging.INFO)
 
 def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, saved_epoch=None, print_step=100, epoch_save=True):
     best_loss = 10101.0
@@ -17,6 +16,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
     bw_epoch = 0
     chk_path = make_chk()
     
+    logging.basicConfig(filename='log/{}_training.log'.format(chk_path),level=logging.INFO)
     logging.info("checkpoint saves in {} directory".format(chk_path))
     if saved_epoch is not None:
         saved_epoch = saved_epoch + 1

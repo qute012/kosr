@@ -64,19 +64,19 @@ class SpectrogramDataset(Dataset):
         return seq
 
 class MelSpectrogramDataset(Dataset):
-    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None):
+    def __init__(self, trn, root_dir='/root/storage/dataset/kspon', mode='train', conf=None, library='librosa'):
         super(MelSpectrogramDataset, self).__init__()
         self.root_dir = root_dir
         with open(trn, 'r') as f:
             self.data = f.read().strip().split('\n')
             
         self.conf = conf
-            
+        self.library = library
         self.prep_data(self.conf['model']['max_len'])
             
         self.transforms = Compose([
-            MelSpectrogram(**self.conf['feature']['spec']),
-            #SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
+            MelSpectrogram(**self.conf['feature']['spec'], library=self.library),
+            SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
         ])
         
     def prep_data(self, tgt_max_len=None, symbol=' :: '):
@@ -101,8 +101,12 @@ class MelSpectrogramDataset(Dataset):
     
     def __getitem__(self, index):
         fname, script = self.data[index]
-        sig, sr = load_audio(fname)
-        spec = torch.FloatTensor(self.transforms(sig)).transpose(1,0)
+        if self.library=='librosa':
+            sig, sr = load_audio(fname, out_tensor=False)
+            spec = torch.FloatTensor(self.transforms(sig)).transpose(1,0)
+        else:
+            sig, sr = load_audio(fname)
+            spec = self.transforms(sig).transpose(1,0)
         seq = self.scr_to_seq(script)
         return spec, seq
         

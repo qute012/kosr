@@ -21,11 +21,11 @@ class EncoderLayer(nn.Module):
         y = self.att_norm(x)
         #y = self.rel_att(x, x, x, pos_enc, mask)
         y = self.att(y,y,y,mask)
-        x = x + self.dropout(y)
+        x = x + y
 
         y = self.ffn_norm(x)
         y = self.ffn(y)
-        y = x + self.dropout(y)
+        y = x + y
         #x = self.dropout(x)
         return y, mask
     

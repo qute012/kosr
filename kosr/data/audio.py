@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import torchaudio
 
-def load_audio(path, sr=16000, out_tensor=False):
+def load_audio(path, sr=16000, out_tensor=True):
     ext = path.split('.')[-1]
     
     if ext=='pcm':

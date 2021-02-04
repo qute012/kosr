@@ -50,8 +50,6 @@ class MultiHeadAttention(nn.Module):
         btz = query.size(0)
         
         q, k, v = self.forward_qkv(query, key, value)
-        #if mask is not None:
-        #    mask = mask.repeat(1, self.n_head, 1, 1)
         
         scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.d_k)
         return self.forward_attention(v, scores, mask)

@@ -51,10 +51,12 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
             
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
+        #print(inputs.shape, enc_mask.shape)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
         tgt_in, golds = self.make_in_out(tgt)
-        tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
+        tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device)
+        
         preds = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
         
         return preds, golds
@@ -86,16 +88,17 @@ class Transformer(nn.Module):
         tgt_in = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
         for step in range(self.max_len):
             #tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
-            tgt_mask = subsequent_mask(step+1).to(tgt.device).unsqueeze(0)
-            preds = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
-            #preds[:,step,:] = pred.squeeze(-2)
-            y_hat = preds.max(-1)[1]
+            #tgt_mask = subsequent_mask(step+1).to(tgt.device).unsqueeze(0)
+            tgt_mask = None
+            pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+            preds[:,step,:] = pred.squeeze(-2)
+            y_hat = pred.max(-1)[1]
             #print(y_hat)
-            #print(y_hat)
-            tgt_in = torch.cat((tgt_in,y_hat[:,step].unsqueeze(1)), dim=1)
-            #y_hats[:,step] = y_hat.squeeze(dim=-1)
+            tgt_in = y_hat
+            #tgt_in = torch.cat((tgt_in,y_hat[:,step].unsqueeze(1)), dim=1)
+            y_hats[:,step] = y_hat.squeeze(dim=-1)
             #y_hats[:,step] = y_hat[:,step]
-        y_hats = tgt_in[:,1:]
+        #y_hats = tgt_in[:,1:]
         if tgt is None:
             """for testing"""
             golds = None
@@ -136,10 +139,10 @@ class Transformer(nn.Module):
     def make_in_out(self, tgt):
         btz = tgt.size(0)
         
-        #tgt_in = torch.clone(tgt)
-        #tgt_in[tgt_in==self.pad_id] = self.eos_id
-        #tgt_in = tgt_in.view(btz,-1)[:, :-1]
-        tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
+        tgt_in = torch.clone(tgt)
+        tgt_in[tgt_in==self.pad_id] = self.eos_id
+        tgt_in = tgt_in.view(btz,-1)[:, :-1]
+        #tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
         tgt_out = tgt[tgt!=self.sos_id].view(btz,-1)
         
         return tgt_in, tgt_out

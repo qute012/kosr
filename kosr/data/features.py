@@ -13,7 +13,7 @@ class Compose(object):
         return data
 
 class MelSpectrogram(object):
-    def __init__(self, sample_rate=16000, n_fft=512, win_length=512, hop_length=256, n_mels=80, normalized=False):
+    def __init__(self, sample_rate=16000, n_fft=512, win_length=512, hop_length=256, n_mels=80, normalized=False, library='librosa'):
         self.sample_rate = sample_rate
         self.n_fft = n_fft
         self.win_length = win_length
@@ -22,17 +22,19 @@ class MelSpectrogram(object):
         self.normalized = normalized
         
         #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
-        """
-        self.transform = torchaudio.transforms.MelSpectrogram(
-            sample_rate=sample_rate,
-            n_fft=self.n_fft,
-            win_length=self.win_length,
-            hop_length=self.hop_length,
-            n_mels=n_mels,
-        )
-        """
         
-        self.transform = librosa.feature.melspectrogram
+        self.library = library
+        
+        if self.library=='librosa':
+            self.transform = librosa.feature.melspectrogram
+        else:
+            self.transform = torchaudio.transforms.MelSpectrogram(
+                sample_rate=sample_rate,
+                n_fft=self.n_fft,
+                win_length=self.win_length,
+                hop_length=self.hop_length,
+                n_mels=n_mels,
+            )
         
     def norm(self, spec, eps=1e-5):
         m = torch.mean(spec, axis=1, keepdims=True)
@@ -40,16 +42,17 @@ class MelSpectrogram(object):
         return (spec-m)/s
 
     def __call__(self, signal):
-        mel = self.transform(
-            signal, 
-            sr=self.sample_rate, 
-            n_fft=self.n_fft, 
-            hop_length=self.hop_length,
-            n_mels=self.n_mels
-        )
-        """
-        mel = self.transform(signal)
-        """
+        if self.library=='librosa':
+            mel = self.transform(
+                signal, 
+                sr=self.sample_rate, 
+                n_fft=self.n_fft, 
+                hop_length=self.hop_length,
+                n_mels=self.n_mels
+            )
+        else:
+            mel = self.transform(signal)
+        
         #mel = self.amplitude_to_db(mel)
         if self.normalized:
             mel = self.norm(mel)

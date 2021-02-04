@@ -17,12 +17,11 @@ class DecoderLayer(nn.Module):
 
         self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
-        self.dropout = nn.Dropout(dropout_rate)
 
     def forward(self, x, x_mask, memory, memory_mask):
         y = self.att_norm(x)
         y = self.att(y, y, y, x_mask)
-        x = x + self.dropout(y)
+        x = x + y
 
         if memory is not None:
             y = self.memory_att_norm(x)
@@ -31,7 +30,7 @@ class DecoderLayer(nn.Module):
 
         y = self.ffn_norm(x)
         y = self.ffn(y)
-        y = x + self.dropout(y)
+        y = x + y
         return y
 
 class Decoder(nn.Module):
