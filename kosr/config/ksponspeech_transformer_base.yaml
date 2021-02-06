@@ -7,8 +7,8 @@ dataset:
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
-  #loss_type: 'label_smoothing'
-  loss_type: 'cross_entropy'
+  loss_type: 'label_smoothing'
+  #loss_type: 'cross_entropy'
   device: 'cuda'
 
 model:
@@ -29,11 +29,11 @@ model:
 optimizer:
   d_model: 512
   warmup: 25000
-  factor: 5
+  factor: 1
 
 train:
   device: 'cuda'
-  batch_size: 8
+  batch_size: 12
   epochs: 50
   save_epoch: 1
   

@@ -135,10 +135,10 @@ class Transformer(nn.Module):
     def make_in_out(self, tgt):
         btz = tgt.size(0)
         
-        #tgt_in = torch.clone(tgt)
-        #tgt_in[tgt_in==self.pad_id] = self.eos_id
-        #tgt_in = tgt_in.view(btz,-1)[:, :-1]
-        tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
+        tgt_in = torch.clone(tgt)
+        tgt_in[tgt_in==self.pad_id] = self.eos_id
+        tgt_in = tgt_in.view(btz,-1)[:, :-1]
+        #tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
         tgt_out = tgt[tgt!=self.sos_id].view(btz,-1)
         
         return tgt_in, tgt_out

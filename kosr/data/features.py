@@ -54,6 +54,7 @@ class MelSpectrogram(object):
             mel = self.transform(signal)
         
         #mel = self.amplitude_to_db(mel)
+        mel = torch.log1p(mel)
         if self.normalized:
             mel = self.norm(mel)
         return mel

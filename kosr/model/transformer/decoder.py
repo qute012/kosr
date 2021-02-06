@@ -3,19 +3,19 @@ import torch
 import torch.nn as nn
 
 from kosr.model.attention import MultiHeadAttention, RelPositionMultiHeadAttention
-from kosr.model.transformer.sub_layer import PositionalEncoding, FeedForwardNetwork
+from kosr.model.transformer.sub_layer import PositionalEncoding, FeedForwardNetwork, LayerNorm
 from kosr.model.mask import target_mask
 
 class DecoderLayer(nn.Module):
     def __init__(self, hidden_dim, filter_dim, n_head, dropout_rate):
         super(DecoderLayer, self).__init__()
-        self.att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
+        self.att_norm = LayerNorm(hidden_dim, eps=1e-6)
         self.att = MultiHeadAttention(hidden_dim, n_head, dropout_rate=0.0)
 
         self.memory_att_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
         self.memory_att = MultiHeadAttention(hidden_dim, n_head, dropout_rate=0.0)
 
-        self.ffn_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
+        self.ffn_norm = LayerNorm(hidden_dim, eps=1e-6)
         self.ffn = FeedForwardNetwork(hidden_dim, filter_dim, dropout_rate)
         self.dropout = nn.Dropout(dropout_rate)
 
@@ -44,7 +44,7 @@ class Decoder(nn.Module):
         self.layers = nn.ModuleList([DecoderLayer(hidden_dim, filter_dim, n_head, dropout_rate)
                     for _ in range(n_layers)])
 
-        self.last_norm = nn.LayerNorm(hidden_dim, eps=1e-6)
+        self.last_norm = LayerNorm(hidden_dim, eps=1e-6)
         self.fc = nn.Linear(hidden_dim, out_dim)
 
     def forward(self, tgt, tgt_mask=None, memory=None, memory_mask=None):
