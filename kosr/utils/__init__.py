@@ -6,7 +6,7 @@ def build_conf(conf_path='config/ksponspeech.yaml'):
     with open(conf_path, 'r') as f:
         conf = yaml.safe_load(f)
     from kosr.utils.convert import vocab
-    if not 'n_fft' in conf['feature']['spec'].keys():
+    if not 'n_mels' in conf['feature']['spec'].keys():
         conf['model']['in_dim'] = int(conf['feature']['spec']['sample_rate'] 
                                       * conf['feature']['spec']['win_length']/2) + 1
     conf['model']['out_dim'] = len(vocab)

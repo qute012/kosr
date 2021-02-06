@@ -25,7 +25,7 @@ class EncoderLayer(nn.Module):
 
         y = self.ffn_norm(x)
         y = self.ffn(y)
-        y = x + y
+        y = x + self.dropout(y)
         #x = self.dropout(x)
         return y, mask
     

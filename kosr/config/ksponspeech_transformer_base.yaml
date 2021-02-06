@@ -7,7 +7,8 @@ dataset:
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
-  loss_type: 'label_smoothing'
+  #loss_type: 'label_smoothing'
+  loss_type: 'cross_entropy'
   device: 'cuda'
 
 model:
@@ -27,12 +28,12 @@ model:
 
 optimizer:
   d_model: 512
-  warmup: 4000
-  factor: 1
+  warmup: 25000
+  factor: 5
 
 train:
   device: 'cuda'
-  batch_size: 16
+  batch_size: 8
   epochs: 50
   save_epoch: 1
   
@@ -40,11 +41,11 @@ feature:
   spec: 
     sample_rate: 16000
     n_mels: 80
-    n_fft: 512
-    hop_length: 256
-    win_length: 512
-    #win_length: 0.02
-    #win_stride: 0.01
+    #n_fft: 512
+    #hop_length: 256
+    #win_length: 512
+    win_length: 0.025
+    win_stride: 0.01
     normalized: False
   augment:
     spec_augment: 0.5

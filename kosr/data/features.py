@@ -13,11 +13,11 @@ class Compose(object):
         return data
 
 class MelSpectrogram(object):
-    def __init__(self, sample_rate=16000, n_fft=512, win_length=512, hop_length=256, n_mels=80, normalized=False, library='librosa'):
+    def __init__(self, sample_rate=16000, win_length=0.02, win_stride=0.01, n_mels=80, normalized=False, library='torchaudio'):
         self.sample_rate = sample_rate
-        self.n_fft = n_fft
-        self.win_length = win_length
-        self.hop_length = hop_length
+        self.hop_length = int(self.sample_rate * win_stride)
+        self.n_fft = int(self.sample_rate * win_length)
+        self.win_length = self.n_fft
         self.n_mels = n_mels
         self.normalized = normalized
         
@@ -82,6 +82,34 @@ class Spectrogram(object):
         spec = self.transform(signal)
         spec = torch.log1p(spec)
         #mel = self.amplitude_to_db(mel)
+        if self.normalized:
+            spec = self.norm(mel)
+        return spec
+
+class FBank(object):
+    def __init__(self, sample_rate=16000, win_length=0.02, win_stride=0.01, n_mels=80, normalized=False):
+        self.sample_rate = sample_rate
+        self.frame_length = win_length * 1000
+        self.frame_shift = win_stride * 1000
+        self.n_mels = n_mels
+        self.normalized = normalized
+        
+        #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        self.transform = torchaudio.compliance.kaldi.fbank
+        
+    def norm(self, spec, eps=1e-5):
+        m = torch.mean(spec, axis=1, keepdims=True)
+        s = torch.std(spec, axis=1, keepdims=True) + eps
+        return (spec-m)/s
+
+    def __call__(self, signal):
+        spec = self.transform(
+            signal,
+            num_mel_bins = self.n_mels,
+            frame_length = self.frame_length,
+            frame_shift = self.frame_shift,
+            sample_frequency = self.sample_rate
+        )
         if self.normalized:
             spec = self.norm(mel)
         return spec
