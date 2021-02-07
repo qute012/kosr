@@ -111,6 +111,7 @@ class FBank(object):
             frame_shift = self.frame_shift,
             sample_frequency = self.sample_rate
         )
+        spec = spec.transpose(1,0)
         if self.normalized:
             spec = self.norm(mel)
         return spec

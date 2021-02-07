@@ -137,7 +137,7 @@ class FBankDataset(Dataset):
             
         self.transforms = Compose([
             FBank(**self.conf['feature']['spec']),
-            #SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
+            SpecAugment(prob=self.conf['feature']['augment']['spec_augment'])
         ])
         
     def prep_data(self, tgt_max_len=None, symbol=' :: '):
@@ -163,7 +163,7 @@ class FBankDataset(Dataset):
     def __getitem__(self, index):
         fname, script = self.data[index]
         sig, sr = load_audio(fname)
-        spec = self.transforms(sig.unsqueeze(0))
+        spec = self.transforms(sig.unsqueeze(0)).transpose(1,0)
         seq = self.scr_to_seq(script)
         return spec, seq
         
