@@ -63,7 +63,7 @@ Will be updated.
 
 ## Model Architecture
 
-Transformer encoder using multi-head attention with relative positional encoding
+Transducer encoder using multi-head attention with relative positional encoding. It referred to transducer papers.
 
 ![image](https://user-images.githubusercontent.com/33983084/106132024-bf7c6c80-61a6-11eb-9db9-785892396558.png)
 
