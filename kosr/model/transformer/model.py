@@ -51,7 +51,6 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
             
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
-        #print(inputs.shape, enc_mask.shape)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
         tgt_in, golds = self.make_in_out(tgt)
@@ -80,7 +79,6 @@ class Transformer(nn.Module):
             inputs,input_length = self.conv(inputs), input_length>>2
         
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
-        #enc_mask = None
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
 
         preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
