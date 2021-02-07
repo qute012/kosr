@@ -39,6 +39,7 @@ sudo apt-get update
 sudo apt-get install gcc-5 g++-5
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
 ```
+RNN-transducer loss can be installed if the installation is completed.
 
 python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 
