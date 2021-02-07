@@ -27,4 +27,5 @@ def make_chk(root='checkpoint'):
 
 train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} lr: {:.7f}"
 valid_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} wer: {:.2f}"
+eval_log = "[{}] cer: {:.2f} wer: {:.2f}"
 epoch_log = "[{}] {} epoch is over. {} epoch best wer: {} {} epoch best loss: {}"

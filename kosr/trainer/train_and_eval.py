@@ -25,7 +25,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
     
     for epoch in range(saved_epoch, epochs):
         train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
-        valid_loss, valid_wer = valid(model, optimizer, criterion, valid_dataloader, epoch)
+        valid_loss, valid_wer = valid(model, criterion, valid_dataloader, epoch)
         if best_loss>valid_loss:
             best_loss = valid_loss
             bl_epoch = epoch
@@ -83,7 +83,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             
     return losses/step, wer/step
         
-def valid(model, optimizer, criterion, dataloader, epoch):
+def valid(model, criterion, dataloader, epoch):
     losses = 0.
     cer = 0.
     wer = 0.
