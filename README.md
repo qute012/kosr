@@ -39,7 +39,6 @@ sudo apt-get update
 sudo apt-get install gcc-5 g++-5
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
 ```
-RNN-transducer loss can be installed if the installation is completed.
 
 python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 
@@ -52,7 +51,7 @@ Before training, you should already get Ai-Hub dataset. And you needs to check c
 ```
 python train.py [--conf config-path]
 ```
-after training, create checkpoint directory automatically. You can check saved model at checkpoint directory.
+Checkpoint directory will be created automatically after training. You can check saved model at checkpoint directory.
 If you want to train continuosly, use continue_from option.
 ```
 python train.py --conf model-configuration --continue_from saved-model-path
