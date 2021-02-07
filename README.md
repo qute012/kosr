@@ -61,13 +61,6 @@ python train.py --conf model-configuration --continue_from saved-model-path
 ## Results
 Will be updated.
 
-## Model Architecture
-
-Transducer encoder using multi-head attention with relative positional encoding. It referred to transducer papers.
-
-![image](https://user-images.githubusercontent.com/33983084/106132024-bf7c6c80-61a6-11eb-9db9-785892396558.png)
-
-
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
 [AI-Hub]: https://www.aihub.or.kr/aidata/105
