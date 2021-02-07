@@ -84,16 +84,16 @@ class Transformer(nn.Module):
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
 
         preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
-        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).fill_(self.sos_id).to(device)
+        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
         
         tgt_in = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
         for step in range(self.max_len):
-            #tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device).unsqueeze(-3)
-            tgt_mask = None
+            tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
             pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+            pred = pred[:, -1, :]
             y_hat = pred.max(-1)[1]
+            tgt_in = torch.cat((tgt_in,y_hat.unsqueeze(1)), dim=1)
             preds[:,step,:] = pred.squeeze()
-            tgt_in = y_hat
             y_hats[:,step] = y_hat.squeeze(dim=-1)
         if tgt is None:
             """for testing"""

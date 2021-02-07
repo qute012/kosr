@@ -24,7 +24,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
         saved_epoch = 0
     
     for epoch in range(saved_epoch, epochs):
-        train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
+        #train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
         valid_loss, valid_wer = valid(model, optimizer, criterion, valid_dataloader, epoch)
         if best_loss>valid_loss:
             best_loss = valid_loss

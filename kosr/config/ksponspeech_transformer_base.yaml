@@ -33,7 +33,7 @@ optimizer:
 
 train:
   device: 'cuda'
-  batch_size: 12
+  batch_size: 8
   epochs: 50
   save_epoch: 1
   
