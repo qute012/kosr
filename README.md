@@ -48,11 +48,15 @@ pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org
 ```
 
 ## Usage
-Before training, you should already get Ai-Hub dataset. And you needs to check configuration in conf directory and set batch size as fittable as your gpu environment.
+Before training, you should already get Ai-Hub dataset. And you needs to check configuration in conf directory and set batch size as fittable as your gpu environment. If you want to use custom configuration, use conf option(default: config/ksponspeech_transducer_base.yaml).
 ```
-python train.py
+python train.py [--conf config-path]
 ```
 after training, create checkpoint directory automatically. You can check saved model at checkpoint directory.
+If you want to train continuosly, use continue_from option.
+```
+python train.py --conf model-configuration --continue_from saved-model-path
+```
 
 ## Results
 Will be updated.
