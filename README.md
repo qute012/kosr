@@ -59,9 +59,9 @@ python train.py --conf model-configuration --continue_from saved-model-path
 ```
 
 ## Results
-|Epoch|Model|CER|WER|
-|-----|------|---|---|
-|2|Transformer|26%|45%|
+|Train Epoch|Model|CER|WER|
+|-----------|------|---|---|
+|02|Transformer|26%|45%|
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
