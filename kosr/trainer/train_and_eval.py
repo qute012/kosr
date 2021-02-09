@@ -4,20 +4,16 @@ from tqdm import tqdm
 import os
 
 from kosr.utils.metrics import metrics
-from kosr.utils import make_chk, train_log, valid_log, epoch_log
+from kosr.utils import make_chk, train_log, valid_log, epoch_log, chk_path, logger
 from kosr.trainer.checkpoint import save
-
-import logging
 
 def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, saved_epoch=None, print_step=100, epoch_save=True):
     best_loss = 10101.0
     bl_epoch = 0
     best_wer = 10101.0
     bw_epoch = 0
-    chk_path = make_chk()
     
-    logging.basicConfig(filename='log/{}_training.log'.format(chk_path),level=logging.INFO)
-    logging.info("checkpoint saves in {} directory".format(chk_path))
+    logger.info("checkpoint saves in {} directory".format(chk_path))
     if saved_epoch is not None:
         saved_epoch = saved_epoch + 1
     else:
@@ -40,7 +36,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
             save(os.path.join(chk_path, f"{epoch}_.pth"), epoch, model, optimizer, valid_loss)
             
         save(os.path.join(chk_path, 'last.pth'), epoch, model, optimizer, valid_loss)
-        logging.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss))
+        logger.info(epoch_log.format("info", epoch, bw_epoch, best_wer, bl_epoch, best_loss))
             
             
 
@@ -78,8 +74,8 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         wer += _wer
         step += 1
         pbar.set_description(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
-        if step%print_step==0:
-            logging.info(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
+        #if step%print_step==0:
+        #    logger.info(train_log.format('training', epoch, losses/step, cer/step, optimizer._rate))
             
     return losses/step, wer/step
         
@@ -110,6 +106,6 @@ def valid(model, criterion, dataloader, epoch):
             wer += _wer
             step += 1
             pbar.set_description(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
-    logging.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
+    logger.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
     
     return losses/step, wer/step

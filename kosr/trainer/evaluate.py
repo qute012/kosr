@@ -2,11 +2,8 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
-from kosr.utils import eval_log
+from kosr.utils import eval_log, logger
 from kosr.utils.metrics import metrics
-
-import logging
-logging.basicConfig(filename='log/eval.log',level=logging.INFO)
 
 def evaluate(model, dataloader):
     losses = 0.
@@ -30,6 +27,6 @@ def evaluate(model, dataloader):
             wer += _wer
             step += 1
             pbar.set_description(valid_log.format('evaluate', cer/step, wer/step))
-    logging.info(valid_log.format('evaluate', cer/step, wer/step))
+    logger.info(valid_log.format('evaluate', cer/step, wer/step))
     
     return cer/step, wer/step
