@@ -27,6 +27,6 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')
     parser.add_argument('--conf', default='config/ksponspeech_transformer_base.yaml', type=str, help="configuration path for training")
-    parser.add_argument('--continue_from', default='', type=str, help="continue to train from saved model")
+    parser.add_argument('--continue_from', default='', type=str, help="evaluate from saved model")
     args = parser.parse_args()
     main(args)

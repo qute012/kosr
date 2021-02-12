@@ -103,8 +103,38 @@ class Transformer(nn.Module):
         
         return preds, golds, y_hats
         
-    def beam_search(self):
-        raise NotImplementedError
+    def beam_search(self, K=32):
+        btz = inputs.size(0)
+        device = inputs.device
+        
+        if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
+            inputs,input_length = self.conv(inputs), input_length>>2
+        
+        enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
+        enc_out, enc_mask = self.encoder(inputs, enc_mask)
+
+        preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
+        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
+        
+        tgt_in = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
+        for step in range(self.max_len):
+            tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
+            pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+            pred = pred[:, -1, :]
+            y_hat = pred.topk(K)[1]
+            print(y_hat.shape)
+            tgt_in = torch.cat((tgt_in,y_hat.unsqueeze(1)), dim=1)
+            preds[:,step,:] = pred.squeeze()
+            y_hats[:,step] = y_hat.squeeze(dim=-1)
+        if tgt is None:
+            """for testing"""
+            golds = None
+        else:
+            """for validation"""
+            golds = tgt[tgt!=self.sos_id].view(btz,-1)[:, :self.max_len].contiguous()
+            preds = preds[:, :golds.size(1)].contiguous()
+        
+        return preds, golds, y_hats
     
     def initialize(self):
         # weight init

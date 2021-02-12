@@ -1,1 +1,33 @@
 checkpoint saves in checkpoint/02-09-11:46 directory
+[valid] epoch: 0 loss: 170.38 cer: 0.85 wer: 1.06
+[info] 0 epoch is over. 0 epoch best wer: 1.0551059280341633 0 epoch best loss: 170.37991606353955
+[valid] epoch: 1 loss: 162.11 cer: 0.57 wer: 0.80
+[info] 1 epoch is over. 1 epoch best wer: 0.7954358420593125 1 epoch best loss: 162.10595665463975
+[valid] epoch: 2 loss: 152.82 cer: 0.39 wer: 0.61
+[info] 2 epoch is over. 2 epoch best wer: 0.6073785948403773 2 epoch best loss: 152.8186831626163
+[valid] epoch: 3 loss: 145.78 cer: 0.33 wer: 0.52
+[info] 3 epoch is over. 3 epoch best wer: 0.5152395976052914 3 epoch best loss: 145.7774271813168
+[valid] epoch: 4 loss: 143.12 cer: 0.29 wer: 0.48
+[info] 4 epoch is over. 4 epoch best wer: 0.47873581778739605 4 epoch best loss: 143.1156379614666
+[valid] epoch: 5 loss: 136.75 cer: 0.27 wer: 0.45
+[info] 5 epoch is over. 5 epoch best wer: 0.44924873546558686 5 epoch best loss: 136.747436244017
+[valid] epoch: 6 loss: 132.75 cer: 0.25 wer: 0.42
+[info] 6 epoch is over. 6 epoch best wer: 0.41692065891781493 6 epoch best loss: 132.75117240589896
+[valid] epoch: 7 loss: 131.64 cer: 0.23 wer: 0.40
+[info] 7 epoch is over. 7 epoch best wer: 0.39734423569767197 7 epoch best loss: 131.63692537842283
+[valid] epoch: 8 loss: 129.90 cer: 0.22 wer: 0.38
+[info] 8 epoch is over. 8 epoch best wer: 0.3848904518017883 8 epoch best loss: 129.89951175565173
+[valid] epoch: 9 loss: 129.40 cer: 0.21 wer: 0.38
+[info] 9 epoch is over. 9 epoch best wer: 0.376189685521771 9 epoch best loss: 129.40212765468914
+[valid] epoch: 10 loss: 124.39 cer: 0.20 wer: 0.36
+[info] 10 epoch is over. 10 epoch best wer: 0.3637381136913859 10 epoch best loss: 124.39012357687494
+[valid] epoch: 11 loss: 126.85 cer: 0.20 wer: 0.35
+[info] 11 epoch is over. 11 epoch best wer: 0.34811765383496274 10 epoch best loss: 124.39012357687494
+[valid] epoch: 12 loss: 125.84 cer: 0.20 wer: 0.35
+[info] 12 epoch is over. 11 epoch best wer: 0.34811765383496274 10 epoch best loss: 124.39012357687494
+[valid] epoch: 13 loss: 125.41 cer: 0.19 wer: 0.35
+[info] 13 epoch is over. 13 epoch best wer: 0.34531347169110616 10 epoch best loss: 124.39012357687494
+[valid] epoch: 14 loss: 124.08 cer: 0.19 wer: 0.34
+[info] 14 epoch is over. 14 epoch best wer: 0.3443664806400923 14 epoch best loss: 124.0832564838373
+[valid] epoch: 15 loss: 124.55 cer: 0.18 wer: 0.33
+[info] 15 epoch is over. 15 epoch best wer: 0.3297534340186854 14 epoch best loss: 124.0832564838373
