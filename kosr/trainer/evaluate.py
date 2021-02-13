@@ -20,13 +20,13 @@ def evaluate(model, dataloader):
                 inputs = inputs.cuda()
                 targets = targets.cuda()
             
-            preds, _, y_hats = model.recognize(inputs, input_length, targets)
+            preds, targets, y_hats = model.recognize(inputs, input_length, targets)
 
             _cer, _wer = metrics(y_hats, targets)
             cer += _cer
             wer += _wer
             step += 1
             pbar.set_description(eval_log.format('evaluate', cer/step, wer/step))
-    logger.info(eval_log.format('evaluate', cer/step, wer/step))
+    #logger.info(eval_log.format('evaluate', cer/step, wer/step))
     
     return cer/step, wer/step

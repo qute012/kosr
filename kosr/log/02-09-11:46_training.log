@@ -31,3 +31,11 @@ checkpoint saves in checkpoint/02-09-11:46 directory
 [info] 14 epoch is over. 14 epoch best wer: 0.3443664806400923 14 epoch best loss: 124.0832564838373
 [valid] epoch: 15 loss: 124.55 cer: 0.18 wer: 0.33
 [info] 15 epoch is over. 15 epoch best wer: 0.3297534340186854 14 epoch best loss: 124.0832564838373
+[valid] epoch: 16 loss: 124.83 cer: 0.18 wer: 0.33
+[info] 16 epoch is over. 16 epoch best wer: 0.32787211132882776 14 epoch best loss: 124.0832564838373
+[valid] epoch: 17 loss: 124.32 cer: 0.18 wer: 0.33
+[info] 17 epoch is over. 17 epoch best wer: 0.32703492454625244 14 epoch best loss: 124.0832564838373
+[valid] epoch: 18 loss: 120.67 cer: 0.18 wer: 0.32
+[info] 18 epoch is over. 18 epoch best wer: 0.31730232481522447 18 epoch best loss: 120.67241245014652
+[valid] epoch: 19 loss: 121.96 cer: 0.17 wer: 0.32
+[info] 19 epoch is over. 18 epoch best wer: 0.31730232481522447 18 epoch best loss: 120.67241245014652

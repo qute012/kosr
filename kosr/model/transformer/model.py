@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from kosr.model.feature_extractor import *
 from kosr.model.transformer.encoder import Encoder
@@ -60,7 +61,7 @@ class Transformer(nn.Module):
         
         return preds, golds
     
-    def recognize(self, inputs, input_length, tgt=None, mode='greedy'):
+    def recognize(self, inputs, input_length, tgt=None, mode='beam'):
         if mode == 'greedy':
             preds, golds, y_hats = self.greedy_search(inputs, input_length, tgt)
         elif mode == 'beam':
@@ -103,7 +104,7 @@ class Transformer(nn.Module):
         
         return preds, golds, y_hats
         
-    def beam_search(self, K=32):
+    def beam_search(self, inputs, input_length, tgt=None, K=8):        
         btz = inputs.size(0)
         device = inputs.device
         
@@ -112,27 +113,48 @@ class Transformer(nn.Module):
         
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
-
-        preds = torch.zeros(btz, self.max_len, self.out_dim, dtype=torch.float32).to(device)
-        y_hats = torch.zeros(btz, self.max_len, dtype=torch.long).to(device)
         
-        tgt_in = torch.zeros(btz,1, dtype=torch.long).fill_(self.sos_id).to(device)
-        for step in range(self.max_len):
-            tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
-            pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
-            pred = pred[:, -1, :]
-            y_hat = pred.topk(K)[1]
-            print(y_hat.shape)
-            tgt_in = torch.cat((tgt_in,y_hat.unsqueeze(1)), dim=1)
-            preds[:,step,:] = pred.squeeze()
-            y_hats[:,step] = y_hat.squeeze(dim=-1)
-        if tgt is None:
-            """for testing"""
-            golds = None
-        else:
-            """for validation"""
-            golds = tgt[tgt!=self.sos_id].view(btz,-1)[:, :self.max_len].contiguous()
-            preds = preds[:, :golds.size(1)].contiguous()
+        hyps_scores = torch.zeros(btz, K, dtype=torch.float32).to(device)
+        hyps_y_hats = torch.zeros(btz, K, self.max_len, dtype=torch.long).to(device)
+        
+        tgt_in = torch.zeros(btz, 1, dtype=torch.long).fill_(self.sos_id).to(device)
+        
+        tgt_mask = subsequent_mask(1).to(tgt.device).eq(0).unsqueeze(0)
+        pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+        pred = pred[:, -1, :]
+        beam_score, y_hat = F.log_softmax(pred).topk(K)
+        
+        hyps_scores = beam_score
+        hyps_y_hats[:,:,0] = y_hat
+        
+        hyps_y_hats = torch.cat((tgt_in.unsqueeze(1).repeat(1,K,1),hyps_y_hats), dim=-1)
+        
+        for step in range(1,self.max_len):
+            best_hyp_scores = torch.zeros(btz, K, K, dtype=torch.float32).to(device)
+            best_hyp_y_hats = torch.zeros(btz, K, K, self.max_len+1, dtype=torch.long).to(device)
+            for n_hyp in range(K):
+                tgt_in = hyps_y_hats[:,n_hyp,:step+1]
+                tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
+                pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+                pred = pred[:, -1, :]
+                beam_score, y_hat = F.log_softmax(pred).topk(K)
+                best_hyp_scores[:,n_hyp,:] = hyps_scores + beam_score
+                best_hyp_y_hats[:,n_hyp,:,:step+1] = tgt_in.unsqueeze(1).repeat(1,K,1)
+                best_hyp_y_hats[:,n_hyp,:,step+1] = y_hat
+                
+            best_hyp_scores = best_hyp_scores.view(btz, -1)
+            best_hyp_y_hats = best_hyp_y_hats.view(btz, -1, self.max_len+1)
+            print(best_hyp_y_hats)
+            beam_score, best_hyps = best_hyp_scores.topk(K)
+            best_hyp_y_hats = torch.stack([best_hyp_y_hats[i, best_hyps[i], :] for i in range(btz)], dim=0)
+
+            hyps_scores = beam_score
+            hyps_y_hats = best_hyp_y_hats
+        
+        best_ids = hyps_scores.max(-1)[1]
+        y_hats = torch.stack([hyps_y_hats[i, best_ids[i], :] for i in range(btz)], dim=0)
+        preds = None
+        golds = None
         
         return preds, golds, y_hats
     
