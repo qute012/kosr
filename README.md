@@ -58,7 +58,7 @@ python train.py --conf model-configuration --continue_from saved-model-path
 ```
 
 ## Results
-|Data||Model|CER|WER|Preprocessing|
+|Data|Model|CER|WER|Preprocessing|
 |----|------|---|---|-------------|
 |Eval-Clean|Transformer|12%|28%|Filter Bank + SpecAugment|
 
