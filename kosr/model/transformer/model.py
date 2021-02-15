@@ -61,10 +61,10 @@ class Transformer(nn.Module):
         
         return preds, golds
     
-    def recognize(self, inputs, input_length, tgt=None, mode='beam'):
-        if mode == 'greedy':
+    def recognize(self, inputs, input_length, tgt=None, search='beam'):
+        if search == 'greedy':
             preds, golds, y_hats = self.greedy_search(inputs, input_length, tgt)
-        elif mode == 'beam':
+        elif search == 'beam':
             preds, golds, y_hats = self.beam_search(inputs, input_length, tgt)
         
         if golds is None:

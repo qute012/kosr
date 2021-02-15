@@ -80,7 +80,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             
     return losses/step, wer/step
         
-def valid(model, criterion, dataloader, epoch):
+def valid(model, criterion, dataloader, epoch, search='greedy'):
     losses = 0.
     cer = 0.
     wer = 0.
@@ -95,7 +95,7 @@ def valid(model, criterion, dataloader, epoch):
                 inputs = inputs.cuda()
                 targets = targets.cuda()
             
-            preds, targets, y_hats = model.recognize(inputs, input_length, targets)
+            preds, targets, y_hats = model.recognize(inputs, input_length, targets, search)
             
             loss = criterion(preds, targets)
             #loss = criterion(preds[:,:targets.size(1),:].contiguous().view(-1,preds.size(-1)), targets.view(-1))
