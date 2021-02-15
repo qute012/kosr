@@ -6,6 +6,7 @@ dist
 .ipynb_checkpoints
 __pycache__
 kosr/checkpoint
+kosr/log
 kosr/checkpoint/*
 kosr/data/Ksponspeech/*/*/*.record
 *.ipynb
