@@ -1,6 +1,6 @@
 # Korean Online Speech Recognition
 
-Implement [Transformer Transducer]. This repository provides end-to-end training 1,000 hours KsponSpeech dataset.
+Implement [Transformer Transducer]. This provides end-to-end korean speech recognition to train 1,000 hours KsponSpeech dataset.
 KsponSpeech dataset was processed by referring to [here].
 
 ## Preparation
