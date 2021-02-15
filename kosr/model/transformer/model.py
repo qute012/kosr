@@ -108,53 +108,85 @@ class Transformer(nn.Module):
         btz = inputs.size(0)
         device = inputs.device
         
+        def get_length_penalty(length, alpha=1.2, min_length=1):
+            p = (1 + length) ** alpha / (1 + min_length) ** alpha
+
+            return p
+        
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
         
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
-        hyps_scores = torch.zeros(btz, K, dtype=torch.float32).to(device)
-        hyps_y_hats = torch.zeros(btz, K, self.max_len, dtype=torch.long).to(device)
+        y_hats = []
         
-        tgt_in = torch.zeros(btz, 1, dtype=torch.long).fill_(self.sos_id).to(device)
-        
-        tgt_mask = subsequent_mask(1).to(tgt.device).eq(0).unsqueeze(0)
-        pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
-        pred = pred[:, -1, :]
-        beam_score, y_hat = F.log_softmax(pred).topk(K)
-        
-        hyps_scores = beam_score
-        hyps_y_hats[:,:,0] = y_hat
-        
-        hyps_y_hats = torch.cat((tgt_in.unsqueeze(1).repeat(1,K,1),hyps_y_hats), dim=-1)
-        
-        for step in range(1,self.max_len):
-            best_hyp_scores = torch.zeros(btz, K, K, dtype=torch.float32).to(device)
-            best_hyp_y_hats = torch.zeros(btz, K, K, self.max_len+1, dtype=torch.long).to(device)
-            for n_hyp in range(K):
-                tgt_in = hyps_y_hats[:,n_hyp,:step+1]
-                tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
-                pred = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
-                pred = pred[:, -1, :]
-                beam_score, y_hat = F.log_softmax(pred).topk(K)
-                best_hyp_scores[:,n_hyp,:] = hyps_scores + beam_score
-                best_hyp_y_hats[:,n_hyp,:,:step+1] = tgt_in.unsqueeze(1).repeat(1,K,1)
-                best_hyp_y_hats[:,n_hyp,:,step+1] = y_hat
-                
-            best_hyp_scores = best_hyp_scores.view(btz, -1)
-            best_hyp_y_hats = best_hyp_y_hats.view(btz, -1, self.max_len+1)
-            print(best_hyp_y_hats)
-            beam_score, best_hyps = best_hyp_scores.topk(K)
-            best_hyp_y_hats = torch.stack([best_hyp_y_hats[i, best_hyps[i], :] for i in range(btz)], dim=0)
+        for bi in range(btz):
+            encoder_output = enc_out[bi].unsqueeze(0)
+            encoder_mask = enc_mask[bi].unsqueeze(0)
+            tgt_in = torch.zeros(1,1, dtype=torch.long).fill_(self.sos_id).to(device)
+            
+            hyp = {'score': 0.0, 'yseq':tgt_in}
+            hyps = [hyp]
+            ended_hyps = []
+            
+            for step in range(self.max_len):
+                hyps_best_kept = []
+                for hyp in hyps:
+                    ys = hyp['yseq']
+                    tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
+                    logits = F.log_softmax(self.decoder(ys, tgt_mask, encoder_output, encoder_mask))
+                    logits = logits[:, -1, :]
+                    local_best_scores, local_best_ids = torch.topk(logits.squeeze(1), K, dim=1)
+                    
+                    for j in range(K):
+                        new_hyp = {}
+                        new_hyp["score"] = hyp["score"] + local_best_scores[0, j]
 
-            hyps_scores = beam_score
-            hyps_y_hats = best_hyp_y_hats
+                        new_hyp["yseq"] = torch.ones(1, (1+ys.size(1)), dtype=torch.long).to(device)
+                        new_hyp["yseq"][:, :ys.size(1)] = hyp["yseq"].cpu()
+                        new_hyp["yseq"][:, ys.size(1)] = int(local_best_ids[0, j]) # adding new word
+                        
+                        hyps_best_kept.append(new_hyp)
+
+                    hyps_best_kept = sorted(hyps_best_kept, key=lambda x:x["score"], reverse=True)[:K]
+                
+                hyps = hyps_best_kept
+                
+                if step==self.max_len-1:
+                    for hyp in hyps:
+                        hyp["yseq"] = torch.cat([hyp["yseq"], torch.ones(1,1, dtype=torch.long).fill_(self.eos_id).to(device)], dim=1)
+
+                unended_hyps = []
+                for hyp in hyps:
+                    if hyp["yseq"][0,-1] == self.eos_id:
+                        seq = hyp["yseq"]
+                        t = seq[:torch.where(seq==1)[0][0]]
+                        hyp["final_score"] = hyp["score"]*get_length_penalty(t.size(0))
+
+                        ended_hyps.append(hyp)
+                        
+                    else:
+                        unended_hyps.append(hyp)
+                hyps = unended_hyps
+                
+            nbest_hyps = sorted(ended_hyps, key=lambda x:x["final_score"], reverse=True)[:K]
+
+            for hyp in nbest_hyps:                
+                hyp["yseq"] = hyp["yseq"][0].cpu().numpy().tolist()
+
+                y_hats.append(hyp["yseq"])
         
-        best_ids = hyps_scores.max(-1)[1]
-        y_hats = torch.stack([hyps_y_hats[i, best_ids[i], :] for i in range(btz)], dim=0)
+        if tgt is None:
+            """for testing"""
+            golds = None
+        else:
+            """for validation"""
+            golds = tgt[tgt!=self.sos_id].view(btz,-1)[:, :self.max_len].contiguous()
+            #preds = preds[:, :golds.size(1)].contiguous()
+        
         preds = None
-        golds = None
+        y_hats = torch.stack(y_hats)
         
         return preds, golds, y_hats
     
