@@ -108,7 +108,7 @@ class Transformer(nn.Module):
         btz = inputs.size(0)
         device = inputs.device
         
-        def get_length_penalty(length, alpha=1.2, min_length=1):
+        def get_length_penalty(length, alpha=1.2, min_length=5):
             p = (1 + length) ** alpha / (1 + min_length) ** alpha
 
             return p
@@ -135,7 +135,7 @@ class Transformer(nn.Module):
                 for hyp in hyps:
                     ys = hyp['yseq']
                     tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
-                    logits = F.log_softmax(self.decoder(ys, tgt_mask, encoder_output, encoder_mask))
+                    logits = self.decoder(ys, tgt_mask, encoder_output, encoder_mask)
                     logits = logits[:, -1, :]
                     local_best_scores, local_best_ids = torch.topk(logits.squeeze(1), K, dim=1)
                     
@@ -161,8 +161,8 @@ class Transformer(nn.Module):
                 for hyp in hyps:
                     if hyp["yseq"][0,-1] == self.eos_id:
                         seq = hyp["yseq"]
-                        t = seq[:torch.where(seq==1)[0][0]]
-                        hyp["final_score"] = hyp["score"]*get_length_penalty(t.size(0))
+                        seq_len = seq[:torch.where(seq==self.eos_id)[0][0]].size(0)
+                        hyp["final_score"] = hyp["score"] * get_length_penalty(seq_len)
 
                         ended_hyps.append(hyp)
                         
@@ -170,11 +170,10 @@ class Transformer(nn.Module):
                         unended_hyps.append(hyp)
                 hyps = unended_hyps
                 
-            nbest_hyps = sorted(ended_hyps, key=lambda x:x["final_score"], reverse=True)[:K]
+            nbest_hyps = sorted(ended_hyps, key=lambda x:x["final_score"], reverse=True)[:1]
 
             for hyp in nbest_hyps:                
                 hyp["yseq"] = hyp["yseq"][0].cpu().numpy().tolist()
-
                 y_hats.append(hyp["yseq"])
         
         if tgt is None:
@@ -186,7 +185,6 @@ class Transformer(nn.Module):
             #preds = preds[:, :golds.size(1)].contiguous()
         
         preds = None
-        y_hats = torch.stack(y_hats)
         
         return preds, golds, y_hats
     
