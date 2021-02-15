@@ -54,7 +54,17 @@ python train.py [--conf config-path]
 Checkpoint directory will be created automatically after training. You can check saved model at checkpoint directory.
 If you want to train continuosly, use continue_from option.
 ```
-python train.py --conf model-configuration --continue_from saved-model-path
+python train.py --conf model-configuration --load_model saved-model-path
+```
+
+Transformer-ls
+```
+python train.py --conf conf/ksponspeech_transformer_base.yaml
+```
+
+Transformer jointed CTC
+```
+python train.py --conf conf/ksponspeech_transformer_joint_ctc_base.yaml
 ```
 
 ## Results
