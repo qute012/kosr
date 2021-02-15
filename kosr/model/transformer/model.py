@@ -136,7 +136,7 @@ class Transformer(nn.Module):
                     ys = hyp['yseq']
                     tgt_mask = subsequent_mask(step+1).to(tgt.device).eq(0).unsqueeze(0)
                     logits = self.decoder(ys, tgt_mask, encoder_output, encoder_mask)
-                    logits = logits[:, -1, :]
+                    logits = F.log_softmax(logits[:, -1, :], dim=-1)
                     local_best_scores, local_best_ids = torch.topk(logits.squeeze(1), K, dim=1)
                     
                     for j in range(K):

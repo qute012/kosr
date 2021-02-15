@@ -1,4 +1,6 @@
 import Levenshtein as Lev
+import torch
+
 from kosr.utils.convert import char2id, id2char, PAD_TOKEN, SOS_TOKEN, EOS_TOKEN, UNK_TOKEN
 
 def metrics(preds, targets):
@@ -60,11 +62,21 @@ def seq_to_str(seqs, id2char):
     sos_id = id2char.index(SOS_TOKEN)
     eos_id = id2char.index(EOS_TOKEN)
     
+    if isinstance(seqs, torch.Tensor):
+        seq_dimension = len(seqs.shape)
+    elif isinstance(seqs, list):
+        seq_dimension = 0
+        next_seq = seqs
+        while isinstance(next_seq, list):
+            seq_dimension += 1
+            next_seq = next_seq[0]
+    
     unk_cnt = 0
-    if len(seqs.shape) == 1:
+    if seq_dimension == 1:
         sentence = str()
         for idx in seqs:
-            idx = idx.item()
+            if isinstance(idx, torch.Tensor):
+                idx = idx.item()
             if idx==sos_id or idx==pad_id or idx==unk_id:
                 continue
             if idx==eos_id:
@@ -72,12 +84,13 @@ def seq_to_str(seqs, id2char):
             sentence += id2char[idx]
         return sentence
 
-    elif len(seqs.shape) == 2:
+    elif seq_dimension == 2:
         sentences = list()
         for seq in seqs:
             sentence = str()
             for idx in seq:
-                idx = idx.item()
+                if isinstance(idx, torch.Tensor):
+                    idx = idx.item()
                 if idx==sos_id or idx==pad_id or idx==unk_id:
                     continue
                 if idx==eos_id:
