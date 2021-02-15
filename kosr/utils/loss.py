@@ -43,12 +43,28 @@ class LabelSmoothingLoss(nn.Module):
         kl = self.criterion(torch.log_softmax(x, dim=1), true_dist)
         denom = total if self.normalize_length else batch_size
         return kl.masked_fill(ignore.unsqueeze(1), 0).sum() / denom
+
+class AttentionJointCTC(nn.Module):
+    def __init__(self, size, padding_idx, ctc_weight=0.3, smoothing=0.1, normalize_length=False, criterion=nn.KLDivLoss(reduction="none"),):
+        """Construct an AttentionJointCTCLoss object."""
+        super(AttentionJointCTC, self).__init__()
+        self.ctc = nn.CTC(blank=padding_idx)
+        self.att = LabelSmoothingLoss(size, padding_idx, smoothing, normalize_length, criterion)
+        self.cw = ctc_weight
+
+    def forward(self, x, target, x_length, target_length):
+        att_loss = self.att(x, target)
+        ctc_loss = self.ctc(x, target, x_length, target_length)
+        
+        return (1-self.cw)*att_loss + self.cw*ctc_loss
     
 def build_criterion(conf):
     device = conf['setting']['device']
     loss_type = conf['setting']['loss_type']
     if loss_type=='label_smoothing':
         criterion = LabelSmoothingLoss(conf['model']['out_dim'], padding_idx=conf['model']['pad_id']).to(device)
+    elif loss_type=='att_joint_ctc':
+        criterion = AttentionJointCTC(conf['model']['out_dim'], padding_idx=conf['model']['pad_id']).to(device)
     elif loss_type=='cross_entropy':
         criterion = nn.CrossEntropyLoss(ignore_index=conf['model']['pad_id']).to(device)
     elif loss_type=='rnnt_loss':

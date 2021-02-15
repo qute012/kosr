@@ -55,3 +55,5 @@ checkpoint saves in checkpoint/02-09-11:46 directory
 [info] 26 epoch is over. 26 epoch best wer: 0.3052899056944856 22 epoch best loss: 119.18100322545713
 [valid] epoch: 27 loss: 118.76 cer: 0.17 wer: 0.30
 [info] 27 epoch is over. 27 epoch best wer: 0.30327367424421126 27 epoch best loss: 118.75727863068794
+[valid] epoch: 28 loss: 120.03 cer: 0.16 wer: 0.30
+[info] 28 epoch is over. 27 epoch best wer: 0.30327367424421126 27 epoch best loss: 118.75727863068794

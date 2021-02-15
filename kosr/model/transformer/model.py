@@ -104,11 +104,11 @@ class Transformer(nn.Module):
         
         return preds, golds, y_hats
         
-    def beam_search(self, inputs, input_length, tgt=None, K=8):        
+    def beam_search(self, inputs, input_length, tgt=None, K=16):        
         btz = inputs.size(0)
         device = inputs.device
         
-        def get_length_penalty(length, alpha=1.2, min_length=5):
+        def get_length_penalty(length, alpha=1.2, min_length=1):
             p = (1 + length) ** alpha / (1 + min_length) ** alpha
 
             return p
@@ -162,7 +162,7 @@ class Transformer(nn.Module):
                     if hyp["yseq"][0,-1] == self.eos_id:
                         seq = hyp["yseq"]
                         seq_len = seq[:torch.where(seq==self.eos_id)[0][0]].size(0)
-                        hyp["final_score"] = hyp["score"] * get_length_penalty(seq_len)
+                        hyp["final_score"] = hyp["score"] / get_length_penalty(seq_len)
 
                         ended_hyps.append(hyp)
                         
