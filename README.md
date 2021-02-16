@@ -75,7 +75,7 @@ python train.py --conf conf/ksponspeech_transformer_joint_ctc_base.yaml
 ## Results
 |Data|Model|CER|WER|Preprocessing|
 |----|------|---|---|-------------|
-|Eval-Clean|Transformer (β=6)|12%|28%|Filter Bank + SpecAugment|
+|Eval-Clean|Transformer (β=6)|14%|32%|Filter Bank + SpecAugment|
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
