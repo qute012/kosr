@@ -55,7 +55,6 @@ class AttentionJointCTC(nn.Module):
     def forward(self, att_x, ctc_x, target, x_length, target_length):
         att_loss = self.att(att_x, target)
         ctc_loss = self.ctc(ctc_x, target, x_length, target_length)
-        
         return (1-self.cw)*att_loss + self.cw*ctc_loss
     
 def build_criterion(conf):
