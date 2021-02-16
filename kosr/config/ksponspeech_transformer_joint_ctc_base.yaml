@@ -7,7 +7,7 @@ dataset:
 setting:
   model_type: 'transformer'
   opt_type: 'noam'
-  loss_type: 'label_smoothing'
+  loss_type: 'att_joint_ctc'
   #loss_type: 'cross_entropy'
   device: 'cuda'
 
@@ -29,7 +29,7 @@ model:
 optimizer:
   d_model: 512
   warmup: 25000
-  factor: 1
+  factor: 5
 
 train:
   device: 'cuda'

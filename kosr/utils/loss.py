@@ -48,7 +48,7 @@ class AttentionJointCTC(nn.Module):
     def __init__(self, size, padding_idx, ctc_weight=0.3, smoothing=0.1, normalize_length=False, criterion=nn.KLDivLoss(reduction="none"),):
         """Construct an AttentionJointCTCLoss object."""
         super(AttentionJointCTC, self).__init__()
-        self.ctc = nn.CTC(blank=padding_idx)
+        self.ctc = nn.CTCLoss(blank=padding_idx)
         self.att = LabelSmoothingLoss(size, padding_idx, smoothing, normalize_length, criterion)
         self.cw = ctc_weight
 

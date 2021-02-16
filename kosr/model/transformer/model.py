@@ -222,3 +222,51 @@ class Transformer(nn.Module):
         tgt_out = tgt[tgt!=self.sos_id].view(btz,-1)
         
         return tgt_in, tgt_out
+    
+class TransformerJointCTC(Transformer):
+    def __init__(
+        self, 
+        out_dim,
+        in_dim=80,
+        feat_extractor='vgg', 
+        enc_n_layers=14, 
+        dec_n_layers=6, 
+        hidden_dim=512, 
+        filter_dim=2048,
+        n_head=8,
+        dropout_rate=0.1,
+        max_len=150,
+        pad_id=0, 
+        sos_id=1, 
+        eos_id=2,
+        init_type="xavier_uniform"
+    ):
+        super(TransformerJointCTC, self).__init__(
+            out_dim, in_dim, feat_extractor, 
+            enc_n_layers, dec_n_layers, hidden_dim, 
+            n_head, dropout_rate, max_len, 
+            pad_id, sos_id, eos_id
+        )
+        
+        self.ctc_logistic = nn.Linear(hidden_dim, out_dim)
+        self.dropout = nn.Dropout(dropout_rate)
+        
+        
+    def forward(self, inputs, input_length, tgt):
+        btz = inputs.size(0)
+        
+        if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
+            inputs,input_length = self.conv(inputs), input_length>>2
+            
+        enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
+        enc_out, enc_mask = self.encoder(inputs, enc_mask)
+        
+        tgt_in, golds = self.make_in_out(tgt)
+        tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device)
+        
+        att_out = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
+        ctc_out = self.ctc_logistic(self.dropout(tgt_in))
+        
+        enc_len = enc_mask.view(btz, -1).sum(1)
+        
+        return att_out, ctc_out, golds, enc_len
