@@ -61,7 +61,8 @@ def train(model, optimizer, criterion, dataloader, epoch, loss_type, max_norm=40
             preds, targets = model(inputs, input_length, targets)
             loss = criterion(preds, targets)
         else:
-            loss = criterion(preds, targets)
+            preds, ctc_out, targets, input_length, target_length = model(inputs, input_length, targets)
+            loss = criterion(preds, ctc_out, targets, input_length, target_length)
         #loss = criterion(preds.view(-1,preds.size(-1)), targets.view(-1))
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=max_norm)

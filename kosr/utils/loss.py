@@ -52,9 +52,9 @@ class AttentionJointCTC(nn.Module):
         self.att = LabelSmoothingLoss(size, padding_idx, smoothing, normalize_length, criterion)
         self.cw = ctc_weight
 
-    def forward(self, x, target, x_length, target_length):
-        att_loss = self.att(x, target)
-        ctc_loss = self.ctc(x, target, x_length, target_length)
+    def forward(self, att_x, ctc_x, target, x_length, target_length):
+        att_loss = self.att(att_x, target)
+        ctc_loss = self.ctc(ctc_x, target, x_length, target_length)
         
         return (1-self.cw)*att_loss + self.cw*ctc_loss
     

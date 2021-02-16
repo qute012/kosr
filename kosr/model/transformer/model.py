@@ -243,7 +243,8 @@ class TransformerJointCTC(Transformer):
     ):
         super(TransformerJointCTC, self).__init__(
             out_dim, in_dim, feat_extractor, 
-            enc_n_layers, dec_n_layers, hidden_dim, 
+            enc_n_layers, dec_n_layers, 
+            hidden_dim, filter_dim,
             n_head, dropout_rate, max_len, 
             pad_id, sos_id, eos_id
         )
@@ -265,9 +266,9 @@ class TransformerJointCTC(Transformer):
         tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device)
         
         att_out = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
-        ctc_out = self.ctc_logistic(self.dropout(tgt_in))
+        ctc_out = self.ctc_logistic(self.dropout(enc_out)).transpose(1,0)
         
         enc_len = enc_mask.view(btz, -1).sum(1)
-        golds_len = torch.LongTensor(x[x!=self.pad_id].size(0) for x in golds).to(inputs.device)
+        golds_length = torch.LongTensor([x[x!=self.pad_id].size(0) for x in golds]).to(inputs.device)
         
-        return att_out, ctc_out, golds, enc_len, golds_len
+        return att_out, ctc_out, golds, input_length, golds_length
