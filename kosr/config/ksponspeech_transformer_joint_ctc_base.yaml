@@ -5,7 +5,7 @@ dataset:
   test: 'data/Ksponspeech/eval_clean.trn'
 
 setting:
-  model_type: 'transformer'
+  model_type: 'transformer_joint_ctc'
   opt_type: 'noam'
   loss_type: 'att_joint_ctc'
   #loss_type: 'cross_entropy'
