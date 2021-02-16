@@ -37,6 +37,6 @@ logger.addHandler(file_handler)
 logger.setLevel(level=logging.DEBUG)
 
 train_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} lr: {:.7f}"
-valid_log = "[{}] epoch: {} loss: {:.2f} cer: {:.2f} wer: {:.2f}"
+valid_log = "[{}] epoch: {} cer: {:.2f} wer: {:.2f}"
 eval_log = "[{}] cer: {:.2f} wer: {:.2f}"
-epoch_log = "[{}] {} epoch is over. {} epoch best wer: {} {} epoch best loss: {}"
+epoch_log = "[{}] {} epoch is over. {} epoch best wer: {:.2f} {} epoch best loss: {:.2f}"

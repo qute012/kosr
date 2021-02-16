@@ -27,7 +27,7 @@ def main(args):
     
     saved_epoch = load(args, model, optimizer)
     
-    train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, epoch_save=True, saved_epoch=saved_epoch)
+    train_and_eval(conf['train']['epochs'], model, optimizer, criterion, train_dataloader, valid_dataloader, conf['setting']['loss_type'], epoch_save=True, saved_epoch=saved_epoch)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='End-to-End Speech Recognition Training')

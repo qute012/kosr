@@ -268,6 +268,6 @@ class TransformerJointCTC(Transformer):
         ctc_out = self.ctc_logistic(self.dropout(tgt_in))
         
         enc_len = enc_mask.view(btz, -1).sum(1)
-        golds_len = torch.LongTensor(x[x!=self.pad_id].size(0) for x in golds)
+        golds_len = torch.LongTensor(x[x!=self.pad_id].size(0) for x in golds).to(inputs.device)
         
         return att_out, ctc_out, golds, enc_len, golds_len

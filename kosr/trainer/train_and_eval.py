@@ -7,7 +7,7 @@ from kosr.utils.metrics import metrics
 from kosr.utils import make_chk, train_log, valid_log, epoch_log, chk_path, logger
 from kosr.trainer.checkpoint import save
 
-def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, max_norm=5, saved_epoch=None, print_step=100, epoch_save=True):
+def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_dataloader, loss_type='label_smoothing', max_norm=5, saved_epoch=None, print_step=100, epoch_save=True):
     best_loss = 10101.0
     bl_epoch = 0
     best_wer = 10101.0
@@ -21,8 +21,8 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
         saved_epoch = 0
     
     for epoch in range(saved_epoch, epochs):
-        train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, max_norm, print_step)
-        valid_loss, valid_wer = valid(model, criterion, valid_dataloader, epoch)
+        train_loss, train_wer = train(model, optimizer, criterion, train_dataloader, epoch, loss_type, max_norm, print_step)
+        valid_loss, valid_wer = valid(model, criterion, valid_dataloader, epoch, loss_type)
         if best_loss>valid_loss:
             best_loss = valid_loss
             bl_epoch = epoch
@@ -41,7 +41,7 @@ def train_and_eval(epochs, model, optimizer, criterion, train_dataloader, valid_
             
             
 
-def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_step=100):
+def train(model, optimizer, criterion, dataloader, epoch, loss_type, max_norm=400, print_step=100):
     losses = 0.
     cer = 0.
     wer = 0.
@@ -56,10 +56,12 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
         if torch.cuda.is_available():
             inputs = inputs.cuda()
             targets = targets.cuda()
-
-        preds, targets = model(inputs, input_length, targets)
-
-        loss = criterion(preds, targets)
+        
+        if loss_type=='label_smoothing':
+            preds, targets = model(inputs, input_length, targets)
+            loss = criterion(preds, targets)
+        else:
+            loss = criterion(preds, targets)
         #loss = criterion(preds.view(-1,preds.size(-1)), targets.view(-1))
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=max_norm)
@@ -80,7 +82,7 @@ def train(model, optimizer, criterion, dataloader, epoch, max_norm=400, print_st
             
     return losses/step, wer/step
         
-def valid(model, criterion, dataloader, epoch, search='greedy'):
+def valid(model, criterion, dataloader, epoch, loss_type, search='greedy'):
     losses = 0.
     cer = 0.
     wer = 0.
@@ -96,17 +98,16 @@ def valid(model, criterion, dataloader, epoch, search='greedy'):
                 targets = targets.cuda()
             
             preds, targets, y_hats = model.recognize(inputs, input_length, targets, search)
-            
-            loss = criterion(preds, targets)
-            #loss = criterion(preds[:,:targets.size(1),:].contiguous().view(-1,preds.size(-1)), targets.view(-1))
+                #loss = criterion(preds, targets)
+                #loss = criterion(preds, targets)
 
-            losses += loss.item()
+            #losses += loss.item()
 
             _cer, _wer = metrics(y_hats, targets)
             cer += _cer
             wer += _wer
             step += 1
-            pbar.set_description(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
-    logger.info(valid_log.format('valid', epoch, losses/step, cer/step, wer/step))
+            pbar.set_description(valid_log.format('valid', epoch, cer/step, wer/step))
+    logger.info(valid_log.format('valid', epoch, cer/step, wer/step))
     
     return losses/step, wer/step
