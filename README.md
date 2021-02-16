@@ -3,6 +3,11 @@
 Implement [Transformer Transducer]. This provides end-to-end korean speech recognition to train 1,000 hours KsponSpeech dataset.
 KsponSpeech dataset was processed by referring to [here].
 
+#### Update
+* Transformer Joint CTC (testing)
+* Transducer(not tested)
+* Transformer
+
 ## Preparation
 You can download dataset at [AI-Hub]. And the structure of the directory should be prepared for getting started as shown below. Preprocesses were used [ESPnet] for normalizing text  from KsponSpeech recipe. It is provided simply as .trn extention files.
 ```
@@ -70,7 +75,7 @@ python train.py --conf conf/ksponspeech_transformer_joint_ctc_base.yaml
 ## Results
 |Data|Model|CER|WER|Preprocessing|
 |----|------|---|---|-------------|
-|Eval-Clean|Transformer (β=6)|12%|28%|Filter Bank + SpecAugment|
+|Eval-Clean|Transformer (β=6)|14%|32%|Filter Bank + SpecAugment|
 
 [Transformer Transducer]:https://arxiv.org/pdf/2002.02562.pdf
 [here]:https://www.mdpi.com/2076-3417/10/19/6936
