@@ -48,13 +48,13 @@ class AttentionJointCTC(nn.Module):
     def __init__(self, size, padding_idx, ctc_weight=0.3, smoothing=0.1, normalize_length=False, criterion=nn.KLDivLoss(reduction="none"),):
         """Construct an AttentionJointCTCLoss object."""
         super(AttentionJointCTC, self).__init__()
-        self.ctc = nn.CTCLoss(blank=padding_idx)
+        self.ctc = nn.CTCLoss(blank=padding_idx, reduction='mean', zero_infinity=True)
         self.att = LabelSmoothingLoss(size, padding_idx, smoothing, normalize_length, criterion)
         self.cw = ctc_weight
 
-    def forward(self, att_x, ctc_x, target, x_length, target_length):
-        att_loss = self.att(att_x, target)
-        ctc_loss = self.ctc(ctc_x, target, x_length, target_length)
+    def forward(self, att_x, att_target, ctc_x, ctc_target, x_length, target_length):
+        att_loss = self.att(att_x, att_target)
+        ctc_loss = self.ctc(ctc_x, ctc_target, x_length, target_length)
         return (1-self.cw)*att_loss + self.cw*ctc_loss
     
 def build_criterion(conf):

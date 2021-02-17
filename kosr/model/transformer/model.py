@@ -218,6 +218,7 @@ class Transformer(nn.Module):
         tgt_in = torch.clone(tgt)
         tgt_in[tgt_in==self.pad_id] = self.eos_id
         tgt_in = tgt_in.view(btz,-1)[:, :-1]
+        
         #tgt_in = tgt[tgt!=self.eos_id].view(btz,-1)
         tgt_out = tgt[tgt!=self.sos_id].view(btz,-1)
         
@@ -262,7 +263,7 @@ class TransformerJointCTC(Transformer):
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
-        tgt_in, golds = self.make_in_out(tgt)
+        tgt_in, att_golds = self.make_in_out(tgt)
         tgt_mask = target_mask(tgt_in, ignore_id=self.pad_id).to(tgt.device)
         
         att_out = self.decoder(tgt_in, tgt_mask, enc_out, enc_mask)
@@ -270,6 +271,7 @@ class TransformerJointCTC(Transformer):
         ctc_out = F.log_softmax(ctc_out, dim=-1)
         
         enc_len = enc_mask.view(btz, -1).sum(1)
-        golds_length = torch.LongTensor([x[x!=self.pad_id].size(0) for x in golds]).to(inputs.device)
+        ctc_golds = att_golds[att_golds!=self.eos_id].view(btz, -1)
+        golds_length = torch.LongTensor([x[x!=self.pad_id].size(0) for x in ctc_golds]).to(inputs.device)
         
-        return att_out, ctc_out, golds, input_length, golds_length
+        return att_out, att_golds, ctc_out, ctc_golds, input_length, golds_length
