@@ -138,7 +138,7 @@ class SpecAugment(object):
                 if self.masking=='zero':
                     spec[f0:f0 + f, :] = 0
                 else:
-                    spec[f0:f0 + f, :] = spec[f0:f0 + f, :].mean()
+                    spec[f0:f0 + f, :] = spec.mean()
 
 
                 t = random.randint(0, self.T)
@@ -146,6 +146,6 @@ class SpecAugment(object):
                 if self.masking=='zero':
                     spec[:, t0:t0 + t] = 0
                 else:
-                    spec[:, t0:t0 + t] = spec[:, t0:t0 + t].mean()
+                    spec[:, t0:t0 + t] = spec.mean()
 
         return spec

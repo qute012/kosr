@@ -42,6 +42,7 @@ class Encoder(nn.Module):
     def forward(self, inputs, mask=None):
         #mask = None
         encoder_output = self.dropout(inputs*self.scale + self.pos_enc(inputs))
+        #encoder_output = inputs
         for enc_layer in self.layers:
             encoder_output, mask = enc_layer(encoder_output, mask)
         encoder_output = self.norm(encoder_output)
