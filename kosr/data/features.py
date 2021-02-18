@@ -21,7 +21,7 @@ class MelSpectrogram(object):
         self.n_mels = n_mels
         self.normalized = normalized
         
-        #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
         
         self.library = library
         
@@ -55,8 +55,9 @@ class MelSpectrogram(object):
         
         #mel = self.amplitude_to_db(mel)
         #mel = torch.log1p(mel)
-        log_offset = 1e-6
-        mel = torch.log(mel+log_offset)
+        spec = self.amplitude_to_db(mel)
+        #log_offset = 1e-20
+        #mel = torch.log(mel+log_offset)
         if self.normalized:
             mel = self.norm(mel)
         return mel
@@ -69,7 +70,7 @@ class Spectrogram(object):
         self.win_length = self.n_fft
         self.normalized = normalized
         
-        #self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
+        self.amplitude_to_db = torchaudio.transforms.AmplitudeToDB()
         self.transform = torchaudio.transforms.Spectrogram(
             n_fft = self.n_fft,
             win_length = self.win_length,
@@ -83,8 +84,8 @@ class Spectrogram(object):
 
     def __call__(self, signal):
         spec = self.transform(signal)
-        spec = torch.log1p(spec)
-        #mel = self.amplitude_to_db(mel)
+        #spec = torch.log1p(spec)
+        #spec = self.amplitude_to_db(spec)
         if self.normalized:
             spec = self.norm(mel)
         return spec
@@ -111,7 +112,8 @@ class FBank(object):
             num_mel_bins = self.n_mels,
             frame_length = self.frame_length,
             frame_shift = self.frame_shift,
-            sample_frequency = self.sample_rate
+            sample_frequency = self.sample_rate,
+            window_type = 'hanning'
         )
         spec = spec.transpose(1,0)
         if self.normalized:
@@ -119,21 +121,31 @@ class FBank(object):
         return spec
     
 class SpecAugment(object):
-    def __init__(self, frequency_mask_max_percentage=0.3, time_mask_max_percentage=0.1, prob=0.5):
-        self.frequency_mask_probability = frequency_mask_max_percentage
-        self.time_mask_probability = time_mask_max_percentage
+    def __init__(self, prob=0.5, n_mask=2, F=30, T=40, masking='mean'):
+        self.n_mask = n_mask
+        self.F = F
+        self.T = T
+        self.masking = masking
         self.probability = prob
 
     def __call__(self, spec):
         if random.random() < self.probability:
             nu, tau = spec.shape
+            
+            for _ in range(self.n_mask):
+                f = random.randint(0, self.F)
+                f0 = random.randint(0, nu - f)
+                if self.masking=='zero':
+                    spec[f0:f0 + f, :] = 0
+                else:
+                    spec[f0:f0 + f, :] = spec[f0:f0 + f, :].mean()
 
-            f = random.randint(0, int(self.frequency_mask_probability*nu))
-            f0 = random.randint(0, nu - f)
-            spec[f0:f0 + f, :] = 0
 
-            t = random.randint(0, int(self.time_mask_probability*tau))
-            t0 = random.randint(0, tau - t)
-            spec[:, t0:t0 + t] = 0
+                t = random.randint(0, self.T)
+                t0 = random.randint(0, tau - t)
+                if self.masking=='zero':
+                    spec[:, t0:t0 + t] = 0
+                else:
+                    spec[:, t0:t0 + t] = spec[:, t0:t0 + t].mean()
 
         return spec

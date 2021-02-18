@@ -28,7 +28,7 @@ model:
 
 optimizer:
   d_model: 512
-  warmup: 25000
+  warmup: 45000
   factor: 1
 
 train:

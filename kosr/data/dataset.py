@@ -184,7 +184,7 @@ class FBankDataset(Dataset):
 def get_dataloader(trn, root_dir='/root/storage/dataset/kspon', batch_size=16, mode='valid', conf=None):
     shuffle = True if mode=='train' else False
     #shuffle = False
-    dataset = MelSpectrogramDataset(trn, root_dir, conf=conf)
+    dataset = FBankDataset(trn, root_dir, conf=conf)
     #dataset = MelSpectrogramDataset(trn, root_dir, conf=conf)
     #It is used when debug.
     #if mode=='train':
