@@ -2,6 +2,7 @@
 KOSR provides model implements based on transformer for end-to-end korean speech recognition.
 And you can train KsponSpeech dataset was processed by referring to [here].
 
+This project includes the models below.
 #### Update
 * Transformer Joint CTC (testing)
 * [Transformer Transducer] (not tested)
