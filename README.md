@@ -73,6 +73,8 @@ python train.py --conf conf/ksponspeech_transformer_joint_ctc_base.yaml
 ```
 
 ## Results
+Paper used 3-grams language model. You can build N-grams using KenLM.
+
 |Data|Model|CER|WER|Preprocessing|
 |----|------|---|---|-------------|
 |Eval-Clean|Transformer (β=6)|14%|32%|Filter Bank + SpecAugment|
