@@ -259,7 +259,7 @@ class TransformerJointCTC(Transformer):
         
         if self.feat_extractor == 'vgg' or self.feat_extractor == 'w2v':
             inputs,input_length = self.conv(inputs), input_length>>2
-            
+        
         enc_mask = get_attn_pad_mask(input_length).to(inputs.device)
         enc_out, enc_mask = self.encoder(inputs, enc_mask)
         
@@ -270,10 +270,9 @@ class TransformerJointCTC(Transformer):
         ctc_out = self.ctc_logistic(self.dropout(enc_out)).transpose(0,1)
         ctc_out = F.log_softmax(ctc_out, dim=-1)
         
-        enc_len = enc_mask.view(btz, -1).sum(1)
-        ctc_golds = [x[:torch.where(x==self.eos_id)[0]] for x in att_golds]
-        golds_length = [x.size(0) for x in ctc_golds]
-        ctc_golds = torch.cat([ctc_golds[i][:l] for i,l in enumerate(golds_length)]).to(inputs.device)
-        golds_length = torch.LongTensor(golds_length).to(inputs.device)
+        ctc_golds = att_golds[att_golds!=self.eos_id].view(btz,-1)
+        golds_length = torch.LongTensor([x[x!=self.pad_id].size(0) for x in ctc_golds]).to(inputs.device)
+        #ctc_golds = torch.cat([ctc_golds[i][:l] for i,l in enumerate(golds_length)]).to(inputs.device)
+        #golds_length = torch.LongTensor(golds_length).to(inputs.device)
         
         return att_out, att_golds, ctc_out, ctc_golds, input_length, golds_length
