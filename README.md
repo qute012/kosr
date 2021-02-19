@@ -1,11 +1,10 @@
 # Korean Online Speech Recognition
-
-Implement [Transformer Transducer]. This provides end-to-end korean speech recognition to train 1,000 hours KsponSpeech dataset.
-KsponSpeech dataset was processed by referring to [here].
+KOSR provides model implements based on transformer for end-to-end korean speech recognition.
+And you can train KsponSpeech dataset was processed by referring to [here].
 
 #### Update
 * Transformer Joint CTC (testing)
-* Transducer(not tested)
+* [Transformer Transducer] (not tested)
 * Transformer
 
 ## Preparation
@@ -22,8 +21,15 @@ root
 ```
 
 ## Environment
+For training transformer and joint CTC, it requires belows.
+python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
 
-Warp-transducer needs to install gcc++5 and export CUDA environment variable.
+```
+pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
+```
+
+If you want to train transformer-transducer, follow the directions below.
+Warp-transducer needs to install gcc++5 and export CUDA environment variable. It's not tested yet.
 
 CUDA_HOME settings
 
@@ -43,12 +49,6 @@ sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt-get update
 sudo apt-get install gcc-5 g++-5
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 1
-```
-
-python>=3.6 & pytorch >= 1.7.0 & torchaudio >= 0.7.0
-
-```
-pip install torch==1.7.0+cu101 torchaudio==0.7.0 -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 ## Usage
